@@ -1,11 +1,93 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import { getProducts } from "../lib/sheets";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const url = new URL(Astro.request.url);
+
+const search = url.searchParams.get("q") || "";
+const page = parseInt(url.searchParams.get("page") || "1");
+
+const PAGE_SIZE = 12;
+
+let products = await getProducts();
+
+// buscador
+if (search) {
+  products = products.filter(p =>
+    p.nombre.toLowerCase().includes(search.toLowerCase())
+  );
+}
+
+// paginación
+const totalPages = Math.ceil(products.length / PAGE_SIZE);
+const start = (page - 1) * PAGE_SIZE;
+const paginated = products.slice(start, start + PAGE_SIZE);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Catálogo">
+
+  <!-- buscador -->
+  <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+    <h1 class="text-2xl font-bold">Productos</h1>
+
+    <form method="GET" class="flex gap-2">
+      <input 
+        type="text" 
+        name="q" 
+        value={search}
+        placeholder="Buscar productos..."
+        class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button class="bg-blue-500 text-white px-4 rounded-lg hover:bg-blue-600">
+        Buscar
+      </button>
+    </form>
+  </div>
+
+  <!-- grid -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+    {paginated.map(product => (
+      <a 
+        href={`/producto/${product.id}`}
+        class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden group"
+      >
+        <div class="overflow-hidden">
+          <img 
+            src={product.imagenes[0]} 
+            class="w-full h-48 object-cover group-hover:scale-105 transition"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="p-4">
+          <h3 class="font-semibold text-lg line-clamp-2">
+            {product.nombre}
+          </h3>
+
+          <p class="text-blue-600 font-bold mt-2">
+            ${product.precio}
+          </p>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <!-- paginador -->
+  <div class="flex justify-center mt-10 gap-2 flex-wrap">
+    {Array.from({ length: totalPages }).map((_, i) => (
+      <a 
+        href={`/?q=${search}&page=${i+1}`}
+        class={`px-4 py-2 rounded-lg border ${
+          page === i+1 
+            ? "bg-blue-500 text-white" 
+            : "bg-white hover:bg-gray-200"
+        }`}
+      >
+        {i + 1}
+      </a>
+    ))}
+  </div>
+
+  <h1 class="text-red-500 text-4xl">TEST</h1>
 </Layout>
