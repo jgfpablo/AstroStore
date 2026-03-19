@@ -1,93 +1,122 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import "../styles/global.css";
 import { getProducts } from "../lib/sheets";
 
 const url = new URL(Astro.request.url);
 
 const search = url.searchParams.get("q") || "";
-const page = parseInt(url.searchParams.get("page") || "1");
-
-const PAGE_SIZE = 12;
+const categoria = url.searchParams.get("categoria") || "todas";
 
 let products = await getProducts();
 
-// buscador
+// 🔎 BUSCADOR
 if (search) {
   products = products.filter(p =>
     p.nombre.toLowerCase().includes(search.toLowerCase())
   );
 }
 
-// paginación
-const totalPages = Math.ceil(products.length / PAGE_SIZE);
-const start = (page - 1) * PAGE_SIZE;
-const paginated = products.slice(start, start + PAGE_SIZE);
+// 🏷️ CATEGORIAS (YA LIMPIAS DESDE SHEETS)
+const categorias = [
+  "todas",
+  ...[...new Set(products.map(p => p.categoria))]
+];
+
+// 🎯 FILTRO
+if (categoria !== "todas") {
+  products = products.filter(p => p.categoria === categoria);
+}
 ---
 
 <Layout title="Catálogo">
 
-  <!-- buscador -->
-  <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-    <h1 class="text-2xl font-bold">Productos</h1>
+  <!-- TITLE -->
+  <h1 class="text-3xl md:text-5xl font-extrabold text-center mb-8">
+    Nuestros Productos
+  </h1>
 
-    <form method="GET" class="flex gap-2">
+  <!-- BUSCADOR -->
+  <div class="flex justify-center mb-6">
+    <form method="GET" class="flex gap-2 w-full max-w-md">
       <input 
         type="text" 
         name="q" 
         value={search}
         placeholder="Buscar productos..."
-        class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-full border border-white/20 bg-white/10 backdrop-blur 
+               rounded-xl px-4 py-2 text-white placeholder-white/60
+               focus:outline-none focus:ring-2 focus:ring-white/40"
       />
-      <button class="bg-blue-500 text-white px-4 rounded-lg hover:bg-blue-600">
+      <button class="bg-white text-black px-4 rounded-xl font-semibold hover:scale-105 transition">
         Buscar
       </button>
     </form>
   </div>
 
-  <!-- grid -->
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-    {paginated.map(product => (
+  <!-- FILTROS -->
+  <div class="flex justify-center mb-8 flex-wrap gap-2">
+    {categorias.map(cat => (
       <a 
-        href={`/producto/${product.id}`}
-        class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden group"
-      >
-        <div class="overflow-hidden">
-          <img 
-            src={product.imagenes[0]} 
-            class="w-full h-48 object-cover group-hover:scale-105 transition"
-            loading="lazy"
-          />
-        </div>
-
-        <div class="p-4">
-          <h3 class="font-semibold text-lg line-clamp-2">
-            {product.nombre}
-          </h3>
-
-          <p class="text-blue-600 font-bold mt-2">
-            ${product.precio}
-          </p>
-        </div>
-      </a>
-    ))}
-  </div>
-
-  <!-- paginador -->
-  <div class="flex justify-center mt-10 gap-2 flex-wrap">
-    {Array.from({ length: totalPages }).map((_, i) => (
-      <a 
-        href={`/?q=${search}&page=${i+1}`}
-        class={`px-4 py-2 rounded-lg border ${
-          page === i+1 
-            ? "bg-blue-500 text-white" 
-            : "bg-white hover:bg-gray-200"
+        href={`/?categoria=${cat}&q=${search}`}
+        class={`px-4 py-2 rounded-full text-sm md:text-base 
+                border border-white/20 backdrop-blur transition ${
+          categoria === cat
+            ? "bg-white text-black font-semibold"
+            : "bg-white/10 hover:bg-white/20"
         }`}
       >
-        {i + 1}
+        {cat === "todas"
+          ? "Todas"
+          : cat.charAt(0).toUpperCase() + cat.slice(1)}
       </a>
     ))}
   </div>
 
-  <h1 class="text-red-500 text-4xl">TEST</h1>
+  <!-- GRID -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    {products.map(product => (
+      <a href={`/producto/${product.id}`}
+        class="group bg-gradient-to-br from-indigo-800/80 to-purple-800/80 
+               p-5 rounded-2xl shadow-xl hover:scale-[1.02] 
+               hover:shadow-2xl transition duration-300">
+
+        <div class="flex flex-col md:flex-row items-center gap-6">
+
+          <!-- IMG -->
+          <div class="w-full md:w-60 h-52 md:h-60 overflow-hidden rounded-xl">
+            <img 
+              src={product.imagenes[0] || "https://via.placeholder.com/300"} 
+              class="w-full h-full object-cover 
+                     group-hover:scale-110 transition duration-500"
+            />
+          </div>
+
+          <!-- INFO -->
+          <div class="flex-1 text-center md:text-left">
+
+            <h2 class="text-xl md:text-2xl font-bold">
+              {product.nombre}
+            </h2>
+
+            <p class="text-white/70 text-sm mt-1 mb-2">
+              {product.descripcion.slice(0, 60)}...
+            </p>
+
+            <p class="text-2xl md:text-3xl font-bold mt-2">
+              ${product.precio}
+            </p>
+
+            <p class="text-xs text-white/50 mt-2">
+              {product.categoria}
+            </p>
+
+          </div>
+        </div>
+
+      </a>
+    ))}
+
+  </div>
+
 </Layout>

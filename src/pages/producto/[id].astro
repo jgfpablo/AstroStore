@@ -2,73 +2,49 @@
 import Layout from "../../layouts/Layout.astro";
 import { getProducts } from "../../lib/sheets";
 
-// ⚡ Habilitar SSR (no requiere getStaticPaths)
 export const prerender = false;
 
-// Acceder al parámetro dinámico
 const id = Astro.params.id;
 
-// Traer productos desde Google Sheets
 const products = await getProducts();
 const product = products.find(p => String(p.id) === id);
-
-if (!product) {
-  throw new Error("Producto no encontrado");
-}
 ---
 
 <Layout title={product.nombre}>
 
-  <a href="/" class="text-blue-500 hover:underline">← Volver</a>
+  <a href="/" class="text-white/80 hover:underline">← Volver</a>
 
   <div class="grid md:grid-cols-2 gap-8 mt-6">
 
-    <!-- Carrusel -->
-    <div>
-      <div class="relative overflow-hidden rounded-xl shadow">
-        <div id="carousel" class="flex transition-transform duration-300">
-          {product.imagenes.map(img => (
-            <img 
-              src={img || "https://via.placeholder.com/400x300"} 
-              class="w-full h-[400px] object-cover flex-shrink-0" 
-              loading="lazy"
-            />
-          ))}
-        </div>
-
-        <button onclick="prev()" class="absolute left-2 top-1/2 bg-white/80 px-3 py-1 rounded">←</button>
-        <button onclick="next()" class="absolute right-2 top-1/2 bg-white/80 px-3 py-1 rounded">→</button>
-      </div>
+    <div class="bg-white/10 rounded-2xl p-4 backdrop-blur">
+      <img 
+        src={product.imagenes[0] || "https://via.placeholder.com/400"} 
+        class="w-full h-80 object-contain"
+      />
     </div>
 
-    <!-- Información -->
     <div>
-      <h1 class="text-3xl font-bold">{product.nombre}</h1>
-      <p class="text-2xl text-blue-600 font-semibold mt-3">${product.precio}</p>
-      <p class="mt-4 text-gray-600 leading-relaxed">{product.descripcion}</p>
-      <button class="mt-6 bg-blue-500 text-white px-6 py-3 rounded-xl hover:bg-blue-600">Comprar</button>
+      <h1 class="text-3xl md:text-4xl font-bold">
+        {product.nombre}
+      </h1>
+
+      <p class="text-3xl mt-3 font-bold text-green-300">
+        ${product.precio}
+      </p>
+
+      <p class="mt-2 text-sm text-white/60">
+        Categoría: {product.categoria}
+      </p>
+
+      <p class="mt-4 text-white/80">
+        {product.descripcion}
+      </p>
+
+      <button class="mt-6 w-full bg-pink-500 hover:bg-pink-600 py-3 rounded-xl font-bold transition">
+        Comprar
+      </button>
     </div>
 
   </div>
 
 </Layout>
-
-<script>
-let index = 0;
-const total = product.imagenes.length;
-const carousel = document.getElementById("carousel");
-
-function update() {
-  carousel.style.transform = `translateX(-${index * 100}%)`;
-}
-
-function next() {
-  index = (index + 1) % total;
-  update();
-}
-
-function prev() {
-  index = (index - 1 + total) % total;
-  update();
-}
-</script>
