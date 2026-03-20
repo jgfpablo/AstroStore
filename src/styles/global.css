@@ -8,8 +8,7 @@ a, button {
   transition: all 0.25s ease;
 }
 
-
- body {
+body {
   background: url("/src/assets/fondo.jpg") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
@@ -17,21 +16,7 @@ a, button {
 }
 
 /* Cards estilo glasmorphism */
-.card {
-  position: relative;
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 300px; /* 🔥 altura fija para cuadrado */
-  display: flex;
-  flex-direction: column;
-}
 
-.card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-}
 
 .btn {
   display: inline-block;
@@ -40,7 +25,7 @@ a, button {
   font-weight: bold;
   color: #fff;
   background: linear-gradient(to right, #ff512f, #dd2476);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
 }
 
 .btn:hover {
@@ -50,7 +35,7 @@ a, button {
 
 /* Categorías */
 .categoria-btn {
-    background: rgba(0, 0, 0, 0.623);
+  background: rgba(0, 0, 0, 0.85); /* más oscuro */
   border: 1px solid rgba(255,255,255,0.2);
   backdrop-filter: blur(8px);
   color: white;
@@ -59,7 +44,7 @@ a, button {
 }
 
 .categoria-btn:hover {
-    background: rgba(0, 0, 0, 0.895);
+  background: rgba(0, 0, 0, 0.95);
   transform: scale(1.05);
 }
 
@@ -67,7 +52,7 @@ a, button {
   background: white;
   color: black;
 }
-input{
-      background: rgba(0, 0, 0, 0.623);
-}
 
+input {
+  background: rgba(0, 0, 0, 0.85); /* más oscuro */
+}
