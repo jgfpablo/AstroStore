@@ -2,77 +2,33 @@
 import Layout from "../layouts/Layout.astro";
 import { getProducts } from "../lib/sheets";
 
-const url = new URL(Astro.request.url);
+// 🔥 CATEGORÍAS FIJAS (editás acá cuando quieras agregar nuevas)
+const categorias = ["llaveros", "imanes", "toppers"];
 
-const search = url.searchParams.get("q") || "";
-const categoria = url.searchParams.get("categoria") || "todas";
-
-let products = await getProducts();
-
-// 🔎 BUSCADOR
-if (search) {
-  products = products.filter(p =>
-    p.nombre.toLowerCase().includes(search.toLowerCase())
-  );
-}
-
-// 🏷️ CATEGORIAS (YA LIMPIAS DESDE SHEETS)
-const categorias = [
-  "todas",
-  ...[...new Set(products.map(p => p.categoria))]
-];
-
-// 🎯 FILTRO
-if (categoria !== "todas") {
-  products = products.filter(p => p.categoria === categoria);
-}
+// 🔥 Traemos productos solo para mostrar (sin filtrar acá)
+const products = await getProducts();
 ---
 
 <Layout title="Catálogo">
 
-  <!-- TITLE -->
   <h1 class="text-3xl md:text-5xl font-extrabold text-center mb-8">
     Nuestros Productos
   </h1>
 
-  <!-- BUSCADOR -->
-  <div class="flex justify-center mb-6">
-    <form method="GET" class="flex gap-2 w-full max-w-md">
-      <input 
-        type="text" 
-        name="q" 
-        value={search}
-        placeholder="Buscar productos..."
-        class="w-full border border-white/20 bg-white/10 backdrop-blur 
-               rounded-xl px-4 py-2 text-white placeholder-white/60
-               focus:outline-none focus:ring-2 focus:ring-white/40"
-      />
-      <button class="bg-white text-black px-4 rounded-xl font-semibold hover:scale-105 transition">
-        Buscar
-      </button>
-    </form>
-  </div>
-
-  <!-- FILTROS -->
-  <div class="flex justify-center mb-8 flex-wrap gap-2">
+  <!-- BOTONES DE CATEGORÍAS -->
+  <div class="flex justify-center mb-10 gap-2 flex-wrap">
     {categorias.map(cat => (
       <a 
-        href={`/?categoria=${cat}&q=${search}`}
-        class={`px-4 py-2 rounded-full text-sm md:text-base 
-                border border-white/20 backdrop-blur transition ${
-          categoria === cat
-            ? "bg-white text-black font-semibold"
-            : "bg-white/10 hover:bg-white/20"
-        }`}
+        href={`/categoria/${cat}`}
+        class="px-4 py-2 rounded-full border border-white/20 
+               bg-white/10 hover:bg-white/20 transition"
       >
-        {cat === "todas"
-          ? "Todas"
-          : cat.charAt(0).toUpperCase() + cat.slice(1)}
+        {cat}
       </a>
     ))}
   </div>
 
-  <!-- GRID -->
+  <!-- GRID DE PRODUCTOS (todos) -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
     {products.map(product => (
@@ -83,7 +39,6 @@ if (categoria !== "todas") {
 
         <div class="flex flex-col md:flex-row items-center gap-6">
 
-          <!-- IMG -->
           <div class="w-full md:w-60 h-52 md:h-60 overflow-hidden rounded-xl">
             <img 
               src={product.imagenes[0] || "https://via.placeholder.com/300"} 
@@ -92,7 +47,6 @@ if (categoria !== "todas") {
             />
           </div>
 
-          <!-- INFO -->
           <div class="flex-1 text-center md:text-left">
 
             <h2 class="text-xl md:text-2xl font-bold">

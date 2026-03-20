@@ -10,41 +10,45 @@ const products = await getProducts();
 const product = products.find(p => String(p.id) === id);
 ---
 
-<Layout title={product.nombre}>
+<Layout title={product?.nombre || "Producto"}>
 
   <a href="/" class="text-white/80 hover:underline">← Volver</a>
 
-  <div class="grid md:grid-cols-2 gap-8 mt-6">
+  {product ? (
+    <div class="grid md:grid-cols-2 gap-8 mt-6">
 
-    <div class="bg-white/10 rounded-2xl p-4 backdrop-blur">
-      <img 
-        src={product.imagenes[0] || "https://via.placeholder.com/400"} 
-        class="w-full h-80 object-contain"
-      />
+      <div class="bg-white/10 rounded-2xl p-4 backdrop-blur">
+        <img 
+          src={product.imagenes[0] || "https://via.placeholder.com/400"} 
+          class="w-full h-80 object-contain"
+        />
+      </div>
+
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold">
+          {product.nombre}
+        </h1>
+
+        <p class="text-3xl mt-3 font-bold text-green-300">
+          ${product.precio}
+        </p>
+
+        <p class="mt-2 text-sm text-white/60">
+          Categoría: {product.categoria}
+        </p>
+
+        <p class="mt-4 text-white/80">
+          {product.descripcion}
+        </p>
+
+        <button class="mt-6 w-full bg-pink-500 hover:bg-pink-600 py-3 rounded-xl font-bold transition">
+          Comprar
+        </button>
+      </div>
+
     </div>
-
-    <div>
-      <h1 class="text-3xl md:text-4xl font-bold">
-        {product.nombre}
-      </h1>
-
-      <p class="text-3xl mt-3 font-bold text-green-300">
-        ${product.precio}
-      </p>
-
-      <p class="mt-2 text-sm text-white/60">
-        Categoría: {product.categoria}
-      </p>
-
-      <p class="mt-4 text-white/80">
-        {product.descripcion}
-      </p>
-
-      <button class="mt-6 w-full bg-pink-500 hover:bg-pink-600 py-3 rounded-xl font-bold transition">
-        Comprar
-      </button>
-    </div>
-
-  </div>
+  ) : (
+    <p class="text-center mt-10">Producto no encontrado</p>
+  )}
 
 </Layout>
