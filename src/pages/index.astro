@@ -36,7 +36,7 @@ const categorias = ["todas", "llaveros", "imanes", "toppers"];
     <input
       id="searchInput"
       type="text"
-      placeholder="Buscar producto... (ej: poke)"
+      placeholder="Buscar producto..."
       class="w-full max-w-xl px-5 py-3 rounded-full 
              bg-white/10 border border-white/20 
              text-white placeholder-white/50
@@ -61,7 +61,7 @@ const categorias = ["todas", "llaveros", "imanes", "toppers"];
         <a href={`/producto/${product.id}`} class="block relative w-full h-full">
 
           <!-- IMAGEN ocupa 80% del alto del card y está centrada -->
-          <div class="w-full h-[80%] flex items-center justify-center overflow-hidden bg-gray-800">
+          <div class="w-full h-[70%] flex items-center ">
             <img
               src={product.imagenes && product.imagenes.length ? product.imagenes[0] : "https://via.placeholder.com/800x800"}
               alt={product.nombre || "Producto"}
