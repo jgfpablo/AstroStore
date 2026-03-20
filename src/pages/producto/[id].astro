@@ -70,7 +70,7 @@ const product = products.find(p => String(p.id) === id);
 
               <!-- Botón WhatsApp -->
               <a 
-                href={`https://wa.me/TU_NUMERO_AQUI?text=Hola! Me interesa el producto: ${product.nombre}`}
+                href={`https://wa.me/+543764172282?text=Hola! Me interesa el producto: ${product.nombre}`}
                 target="_blank"
                 class="whatsapp-btn w-full mb-10 no-underline flex items-center justify-center gap-3"
               >
@@ -117,19 +117,53 @@ const product = products.find(p => String(p.id) === id);
 
 
 <script>
-  // Script para el scroll de las flechas
   const setupGallery = () => {
     const scrollContainer = document.getElementById('thumbScroll');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const mainImage = document.getElementById('mainImage');
+    
+    // Obtenemos todas las miniaturas
+    const thumbs = Array.from(document.querySelectorAll('.thumb-card img'));
+    let currentIndex = 0;
+
+    const updateMainImage = (index) => {
+      if (thumbs[index]) {
+        mainImage.style.opacity = '0'; // Efecto de transición
+        setTimeout(() => {
+          mainImage.src = thumbs[index].src;
+          mainImage.style.opacity = '1';
+        }, 200);
+        currentIndex = index;
+      }
+    };
 
     if (scrollContainer && prevBtn && nextBtn) {
-      prevBtn.onclick = () => scrollContainer.scrollBy({ left: -150, behavior: 'smooth' });
-      nextBtn.onclick = () => scrollContainer.scrollBy({ left: 150, behavior: 'smooth' });
+      nextBtn.onclick = () => {
+        // Si no es la última imagen, avanza
+        if (currentIndex < thumbs.length - 1) {
+          updateMainImage(currentIndex + 1);
+        }
+        scrollContainer.scrollBy({ left: 100, behavior: 'smooth' });
+      };
+
+      prevBtn.onclick = () => {
+        // Si no es la primera imagen, retrocede
+        if (currentIndex > 0) {
+          updateMainImage(currentIndex - 1);
+        }
+        scrollContainer.scrollBy({ left: -100, behavior: 'smooth' });
+      };
     }
+    
+    // Hacer que al hacer clic en una miniatura también actualice el índice actual
+    thumbs.forEach((thumb, index) => {
+      thumb.parentElement.addEventListener('click', () => {
+        currentIndex = index;
+      });
+    });
   };
 
-  // Ejecutar en carga inicial y tras navegaciones de Astro
   setupGallery();
   document.addEventListener('astro:after-swap', setupGallery);
 </script>
