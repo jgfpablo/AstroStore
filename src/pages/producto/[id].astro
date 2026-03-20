@@ -14,7 +14,11 @@ const imagenes = product?.imagenes || ["https://via.placeholder.com/600"];
 
 <Layout title={product?.nombre || "Producto"}>
   <div class="max-w-6xl mx-auto px-4 py-8">
-    <a href="/" class="text-white/60 hover:text-white transition mb-6 inline-block">← Volver al catálogo</a>
+  <div class="mb-8">
+  <a href="/" class="btn-volver-vibrant">
+    <span class="flecha">←</span> Volver al catálogo
+  </a>
+</div>
 
     {product ? (
       <div class="product-detail-container overflow-hidden">

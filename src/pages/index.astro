@@ -31,14 +31,17 @@ const categoriasDefinidas = [
       </nav>
     </div>
 
-    <div class="flex justify-center mb-16 px-4">
-        <input
-            id="searchInput"
-            type="text"
-            placeholder="¿Qué estás buscando hoy?..."
-            class="w-full max-w-2xl px-6 py-4 rounded-2xl outline-none text-lg shadow-2xl buscador-neon"
-        />
-    </div>
+   <div class="flex justify-center mb-16 px-4">
+  <div class="search-container-vibrant w-full max-w-2xl">
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="¿Qué estás buscando hoy?..."
+      class="buscador-neon"
+    />
+    <div class="search-glow"></div>
+  </div>
+</div>
 
     <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
       {products.map(product => (

@@ -140,3 +140,64 @@ body {
 
 .btn-morado { background: linear-gradient(to bottom, #9c27b0, #6a1b9a); border-color: #4a148c; box-shadow: 0 5px 0px #310d5e, 0 8px 20px rgba(0,0,0,0.4); }
 .btn-rojo { background: linear-gradient(to bottom, #f44336, #b71c1c); border-color: #7f0000; box-shadow: 0 5px 0px #5a0000, 0 8px 20px rgba(0,0,0,0.4); }
+
+
+
+
+
+/* --- BOTÓN VOLVER AL CATÁLOGO VIBRANTE --- */
+/* --- CONTENEDOR PARA DAR ESPACIO --- */
+.container-volver {
+  padding: 20px 0;
+  margin-bottom: 20px;
+}
+
+/* --- BOTÓN VOLVER CON MÁXIMO CONTRASTE --- */
+.btn-volver-vibrant {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  
+  /* Fondo de cristal más opaco para que no se trasluzca tanto el fondo naranja */
+  background: rgba(15, 15, 26, 0.6); 
+  backdrop-filter: blur(15px);
+  
+  /* Borde grueso y brillante */
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 14px;
+  
+  color: #ffffff;
+  font-weight: 800; /* Texto más grueso */
+  font-size: 1.1rem;
+  text-decoration: none;
+  text-transform: uppercase; /* Más autoridad visual */
+  letter-spacing: 0.5px;
+  
+  /* Sombra externa para separar del fondo */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-volver-vibrant .flecha {
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
+}
+
+/* --- ESTADO HOVER (LLAMATIVO) --- */
+.btn-volver-vibrant:hover {
+  background: #ffffff; /* Cambio radical a blanco */
+  color: #f44336; /* Texto en rojo/naranja */
+  border-color: #ffffff;
+  transform: translateX(-8px); /* Movimiento más marcado */
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+.btn-volver-vibrant:hover .flecha {
+  transform: translateX(-5px);
+}
+
+/* Efecto de pulsación al hacer clic */
+.btn-volver-vibrant:active {
+  transform: scale(0.9);
+}
