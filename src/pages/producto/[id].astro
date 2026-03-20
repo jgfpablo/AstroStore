@@ -8,43 +8,43 @@ const id = Astro.params.id;
 const products = await getProducts();
 const product = products.find(p => String(p.id) === id);
 
-// Simulamos un array de imágenes si solo viene una, para que se vea la galería
- const imagenes = product?.imagenes ;
+const imagenes = product?.imagenes || [];
 ---
+
 <Layout title={product?.nombre || "Producto"}>
-  <div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="mb-8">
-      <a href="/" class="btn-volver-vibrant">
+  <div class="max-w-6xl mx-auto px-2 sm:px-4 py-4 md:py-8">
+    <div class="mb-6 md:mb-8">
+      <a href="/" class="btn-volver-vibrant text-sm md:text-base">
         <span class="flecha">←</span> Volver al catálogo
       </a>
     </div>
 
     {product ? (
-      <div class="product-detail-container overflow-hidden">
-        <div class="grid md:grid-cols-2">
+      <div class="product-detail-container overflow-hidden mx-auto max-w-[400px] md:max-w-none">
+        <div class="grid grid-cols-1 md:grid-cols-2">
           
-          <div class="p-8 flex flex-col items-center justify-center bg-gradient-to-br from-purple-900/10 to-transparent">
-             <div class="relative w-full aspect-square flex items-center justify-center mb-8">
+          <div class="p-4 md:p-8 flex flex-col items-center justify-center bg-gradient-to-br from-purple-900/10 to-transparent">
+             <div class="relative w-full aspect-square flex items-center justify-center mb-6 md:mb-8">
                 <img 
                   id="mainImage"
                   src={imagenes[0]} 
                   alt={product.nombre}
-                  class="max-w-full max-h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-opacity duration-300"
+                  class="max-w-[90%] max-h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-opacity duration-300"
                 />
              </div>
              
              <div class="relative w-full group">
-                <button id="prevBtn" class="nav-arrow left-0" aria-label="Anterior">
+                <button id="prevBtn" class="nav-arrow left-0 hidden md:flex" aria-label="Anterior">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-6 h-6"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
                 
-                <button id="nextBtn" class="nav-arrow right-0" aria-label="Siguiente">
+                <button id="nextBtn" class="nav-arrow right-0 hidden md:flex" aria-label="Siguiente">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-6 h-6"><path d="M9 18l6-6-6-6"/></svg>
                 </button>
 
-                <div id="thumbScroll" class="flex gap-3 w-full overflow-hidden px-12 py-2 scroll-smooth">
+                <div id="thumbScroll" class="flex gap-3 w-full overflow-x-auto md:overflow-hidden px-2 md:px-12 py-2 scroll-smooth no-scrollbar">
                   {imagenes.map((img) => (
-                    <div class="thumb-card flex-shrink-0 cursor-pointer">
+                    <div class="thumb-card flex-shrink-0 cursor-pointer w-[70px] h-[70px] md:w-[85px] md:h-[85px]">
                       <img 
                         src={img} 
                         class="w-full h-full object-cover" 
@@ -56,57 +56,52 @@ const product = products.find(p => String(p.id) === id);
              </div>
           </div>
 
-          <div class="details-panel p-8 md:p-12 flex flex-col justify-between border-l border-white/10 h-full min-h-[600px]">
+          <div class="details-panel p-6 md:p-12 flex flex-col justify-between border-t md:border-t-0 md:border-l border-white/10 h-full min-h-[500px] md:min-h-[600px]">
             
             <div>
-              <div class="flex justify-between items-start mb-8">
+              <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-8">
                 <div>
-                  <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-tight uppercase tracking-tighter">
+                  <h1 class="text-3xl md:text-5xl font-extrabold text-white leading-tight uppercase tracking-tighter">
                     {product.nombre}
                   </h1>
-                  <p class="text-orange-400 font-bold mt-2 text-lg">
+                  <p class="text-orange-400 font-bold mt-1 md:mt-2 text-base md:text-lg">
                     Categoría: <span class="uppercase">{product.categoria}</span>
                   </p>
                 </div>
-                <div class="text-right">
-                  <p class="text-4xl font-black text-white">
+                <div class="sm:text-right">
+                  <p class="text-3xl md:text-4xl font-black text-white">
                     ${product.precio}
                   </p>
-                  <span class="text-xs text-white/40 font-bold uppercase tracking-widest">Efectivo / Transferencia</span>
+                  <span class="text-[10px] md:text-xs text-white/40 font-bold uppercase tracking-widest block mt-1">Efectivo / Transferencia</span>
                 </div>
               </div>
 
-             
-
-              <div class="prose prose-invert max-w-none">
-                <p class="text-white/80 text-lg leading-relaxed">
+              <div class="prose prose-invert max-w-none mb-8">
+                <p class="text-white/80 text-base md:text-lg leading-relaxed">
                   {product.descripcion}
                 </p>
               </div>
 
-               <div class="prose prose-invert max-w-none pt-6 border-t border-white/10 mt-6">
-                 <h2 class="text-2xl font-bold text-white mb-4">Información de Encargos</h2>
-                <p class="text-white/80 text-lg leading-relaxed">
-                 Recordá que para realizar encargos se debe abonar el 50% del total por adelantado.
-Todos los pedidos tienen un tiempo de espera mínimo de 24 horas desde el momento de confirmación del pago.
-Los tiempos pueden variar según la complejidad del diseño o cantidad solicitada.
-
-                </p>
+              <div class="pt-6 border-t border-white/10">
+                <h2 class="text-xl md:text-2xl font-bold text-white mb-3">Información de Encargos</h2>
+                <div class="space-y-3 text-white/70 text-sm md:text-base leading-snug">
+                  <p>• Se debe abonar el <strong class="text-orange-400 text-lg">50%</strong> de adelanto.</p>
+                  <p>• Tiempo mínimo de entrega: <strong class="text-white">24 horas</strong>.</p>
+                  <p>• Sujeto a complejidad del diseño.</p>
+                </div>
               </div>
-
-
             </div>
 
-            <div class="mt-12">
+            <div class="mt-10 md:mt-12">
               <a 
                 href={`https://wa.me/+543764172282?text=Hola! Me interesa el producto: ${product.nombre}`}
                 target="_blank"
-                class="whatsapp-btn w-full no-underline flex items-center justify-center gap-4 bg-[#25D366] hover:bg-[#128C7E] text-white py-5 rounded-2xl font-black text-xl transition-all shadow-[0_10px_30px_rgba(37,211,102,0.2)] hover:shadow-[0_15px_40px_rgba(37,211,102,0.4)] hover:-translate-y-1"
+                class="whatsapp-btn w-full no-underline flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white py-4 md:py-5 rounded-2xl font-black text-lg md:text-xl transition-all shadow-lg active:scale-95"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.886.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
                 </svg>
-             WhatsApp
+               WhatsApp
               </a>
             </div>
           </div>
@@ -125,15 +120,14 @@ Los tiempos pueden variar según la complejidad del diseño o cantidad solicitad
     const scrollContainer = document.getElementById('thumbScroll');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    const mainImage = document.getElementById('mainImage');
+    const mainImage = document.getElementById('mainImage') as HTMLImageElement;
     
-    // Obtenemos todas las miniaturas
-    const thumbs = Array.from(document.querySelectorAll('.thumb-card img'));
+    const thumbs = Array.from(document.querySelectorAll('.thumb-card img')) as HTMLImageElement[];
     let currentIndex = 0;
 
-    const updateMainImage = (index) => {
-      if (thumbs[index]) {
-        mainImage.style.opacity = '0'; // Efecto de transición
+    const updateMainImage = (index: number) => {
+      if (thumbs[index] && mainImage) {
+        mainImage.style.opacity = '0';
         setTimeout(() => {
           mainImage.src = thumbs[index].src;
           mainImage.style.opacity = '1';
@@ -144,27 +138,17 @@ Los tiempos pueden variar según la complejidad del diseño o cantidad solicitad
 
     if (scrollContainer && prevBtn && nextBtn) {
       nextBtn.onclick = () => {
-        // Si no es la última imagen, avanza
-        if (currentIndex < thumbs.length - 1) {
-          updateMainImage(currentIndex + 1);
-        }
+        if (currentIndex < thumbs.length - 1) updateMainImage(currentIndex + 1);
         scrollContainer.scrollBy({ left: 100, behavior: 'smooth' });
       };
-
       prevBtn.onclick = () => {
-        // Si no es la primera imagen, retrocede
-        if (currentIndex > 0) {
-          updateMainImage(currentIndex - 1);
-        }
+        if (currentIndex > 0) updateMainImage(currentIndex - 1);
         scrollContainer.scrollBy({ left: -100, behavior: 'smooth' });
       };
     }
     
-    // Hacer que al hacer clic en una miniatura también actualice el índice actual
     thumbs.forEach((thumb, index) => {
-      thumb.parentElement.addEventListener('click', () => {
-        currentIndex = index;
-      });
+      thumb.parentElement?.addEventListener('click', () => updateMainImage(index));
     });
   };
 
@@ -175,9 +159,13 @@ Los tiempos pueden variar según la complejidad del diseño o cantidad solicitad
 <style>
   .product-detail-container {
     background: linear-gradient(145deg, #2d162a 0%, #121225 50%, #6e2114 100%);
-    border-radius: 32px;
+    border-radius: 24px; /* Un poco más pequeño para mobile */
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+  }
+
+  @media (min-width: 768px) {
+    .product-detail-container { border-radius: 32px; }
   }
 
   .details-panel {
@@ -185,70 +173,48 @@ Los tiempos pueden variar según la complejidad del diseño o cantidad solicitad
     backdrop-filter: blur(20px);
   }
 
-  .comprar-ahora-btn {
-    background: linear-gradient(90deg, #8e1a53 0%, #ff4b38 100%);
-    color: white;
-    font-weight: 800;
-    font-size: 1.3rem;
-    padding: 16px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(255, 75, 56, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .comprar-ahora-btn:hover {
-    transform: translateY(-3px);
-    filter: brightness(1.15);
-    box-shadow: 0 15px 35px rgba(255, 75, 56, 0.35);
-  }
+  /* Ocultar scrollbar pero permitir scroll */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
   .nav-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
-    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    opacity: 0;
-  }
-
-  .group:hover .nav-arrow {
-    opacity: 1;
-  }
-
-  .nav-arrow:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-50%) scale(1.1);
   }
 
   .thumb-card {
-    width: 85px;
-    height: 85px;
-    border-radius: 14px;
-    border: 2px solid rgba(249, 115, 22, 0.3);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
     overflow: hidden;
     background: rgba(0, 0, 0, 0.3);
     transition: all 0.2s ease;
   }
 
-  .thumb-card:hover {
+  .thumb-card:hover, .thumb-card:active {
     border-color: #f97316;
     transform: scale(1.05);
   }
 
-  .check-icon {
-    color: #f97316;
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+  .btn-volver-vibrant {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    opacity: 0.7;
   }
 </style>
