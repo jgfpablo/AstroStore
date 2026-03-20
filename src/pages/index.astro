@@ -1,153 +1,116 @@
 ---
-// src/pages/index.astro
 import Layout from "../layouts/Layout.astro";
 import { getProducts } from "../lib/sheets";
 
-// 🔥 PRODUCTOS
 const products = await getProducts();
-
-// 🔥 CATEGORÍAS FIJAS
-const categorias = ["todas", "llaveros", "imanes", "toppers"];
+const categorias = ["Todos", "Toppers", "Escudos", "Llaveros", "Multicolor"];
 ---
 
-<Layout title="Catálogo">
+<Layout title="Catálogo 3D">
 
-  <h1 class="text-3xl md:text-5xl font-extrabold text-center mb-8 text-white">
-    Nuestros Productos
-  </h1>
+  <div class="max-w-7xl mx-auto py-10 px-4">
+    <h1 class="text-4xl md:text-6xl font-black text-center mb-10 text-white tracking-tighter uppercase">
+      Catálogo Exclusivo
+    </h1>
 
-  <!-- 🏷️ CATEGORÍAS -->
-  <div class="flex justify-center mb-6 gap-3 flex-wrap">
-    {categorias.map(cat => (
-      <button
-        class="categoria-btn px-5 py-2 rounded-full 
-               bg-white/10 backdrop-blur border border-white/20 
-               hover:bg-white/20 hover:scale-105 
-               transition text-sm font-medium text-white"
-        data-categoria={cat}
-      >
-        {cat}
-      </button>
-    ))}
-  </div>
+    <div class="flex justify-center mb-8 gap-4 flex-wrap">
+      {categorias.map(cat => (
+        <button
+          class="categoria-btn hover:scale-105"
+          data-categoria={cat.toLowerCase()}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
 
-  <!-- 🔍 BUSCADOR -->
-  <form id="searchForm" class="flex justify-center mb-10" on:submit>
-    <input
-      id="searchInput"
-      type="text"
-      placeholder="Buscar producto..."
-      class="w-full max-w-xl px-5 py-3 rounded-full 
-             bg-white/10 border border-white/20 
-             text-white placeholder-white/50
-             backdrop-blur
-             focus:outline-none focus:ring-2 focus:ring-pink-500
-             shadow-lg"
-    />
-  </form>
+    <form id="searchForm" class="flex justify-center mb-16 px-4">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="¿Qué estás buscando hoy?..."
+        class="w-full max-w-2xl px-6 py-4 rounded-2xl outline-none text-lg shadow-2xl"
+      />
+    </form>
 
-  <!-- GRID -->
-  <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-0">
+    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+      {products.map(product => (
+        <div
+          class="product-item p-7"
+          data-nombre={String(product.nombre || "").toLowerCase()}
+          data-categoria={String(product.categoria || "").toLowerCase()}
+        >
+          <a href={`/producto/${product.id}`} class="absolute inset-0 z-0"></a>
 
-    {products.map(product => (
-     <div
-  class="product-item relative p-6 flex flex-col justify-between"
-  data-nombre={String(product.nombre || "").toLowerCase().trim()}
-  data-categoria={product.categoria}
->
-  <a href={`/producto/${product.id}`} class="absolute inset-0 z-0"></a>
+          <div class="relative z-10 mb-2">
+            <h2 class="text-2xl font-extrabold text-white leading-none tracking-tight">
+              {product.nombre}
+            </h2>
+            <p class="subtitulo-card">{product.categoria === 'toppers' ? 'Diseños a Medida' : 'Accesorios 3D'}</p>
+          </div>
 
-  <div class="relative z-10">
-    <h2 class="text-2xl font-bold text-white leading-tight">
-      {product.nombre}
-    </h2>
-    <p class="subtitulo-card">Diseños a Medida</p>
-  </div>
+          <div class="flex-1 flex items-center justify-center p-4 relative z-0">
+            <img
+              src={product.imagenes?.[0] || "https://via.placeholder.com/400"}
+              alt={product.nombre}
+              class="max-h-52 w-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)]"
+            />
+          </div>
 
-  <div class="flex-1 flex items-center justify-center my-4">
-    <img
-      src={product.imagenes?.[0] || "https://via.placeholder.com/800x800"}
-      alt={product.nombre}
-      class="max-h-full w-auto object-contain drop-shadow-2xl"
-    />
-  </div>
-
-  <div class="relative z-10 flex flex-col gap-3">
-    <p class="precio-card">${product.precio}.00</p>
-    
-    <div class="flex">
-        <span class="ver-detalles-btn">
-          Ver Detalles
-        </span>
+          <div class="relative z-10 mt-4">
+            <p class="precio-card mb-4">${product.precio}.00</p>
+            
+            <div class="flex">
+                <span class={`ver-detalles-btn ${
+                    product.categoria === 'llaveros' ? 'btn-morado' : 
+                    product.categoria === 'escudos' ? 'btn-rojo' : ''
+                }`}>
+                  {product.categoria === 'llaveros' ? 'Ver Más' : 
+                   product.categoria === 'toppers' ? 'Ver Detalles' : 'Comprar Ahora'}
+                </span>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
-</div>
-    ))}
 
-  </div>
-
-  <!-- SCRIPT FILTROS -->
   <script>
-    // Esperamos a que el DOM esté listo por si Tailwind o Astro inyectan algo después
-    (function () {
-      const form = document.getElementById("searchForm");
+    const setupFilters = () => {
       const input = document.getElementById("searchInput");
       const items = document.querySelectorAll(".product-item");
       const botones = document.querySelectorAll(".categoria-btn");
 
-      let categoriaActual = "todas";
+      let catActual = "todos";
 
-      function filtrar() {
-        const texto = (input.value || "").toLowerCase().trim();
-
+      const filtrar = () => {
+        const busqueda = (input.value || "").toLowerCase().trim();
         items.forEach(item => {
-          const nombre = (item.dataset.nombre || "").toLowerCase();
-          const categoria = (item.dataset.categoria || "").toLowerCase();
-
-          const coincideTexto = nombre.includes(texto);
-          const coincideCategoria =
-            categoriaActual === "todas" || categoria === categoriaActual;
-
-          if (coincideTexto && coincideCategoria) {
-            item.style.display = "block";
-          } else {
-            item.style.display = "none";
-          }
+          const nombre = item.dataset.nombre || "";
+          const categoria = item.dataset.categoria || "";
+          const coincideTexto = nombre.includes(busqueda);
+          const coincideCat = catActual === "todos" || categoria === catActual;
+          
+          item.style.display = (coincideTexto && coincideCat) ? "flex" : "none";
         });
-      }
+      };
 
-      // 🔍 ENTER (submit del form)
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        filtrar();
-      });
+      input.addEventListener("input", filtrar);
 
-      // Filtrar en tiempo real al escribir (opcional, útil UX)
-      input.addEventListener("input", () => {
-        filtrar();
-      });
-
-      // 🏷️ CLICK CATEGORÍAS
       botones.forEach(btn => {
         btn.addEventListener("click", () => {
-          categoriaActual = (btn.dataset.categoria || "todas").toLowerCase();
-
-          botones.forEach(b => b.classList.remove("bg-white", "text-black"));
-          btn.classList.add("bg-white", "text-black");
-
+          catActual = btn.dataset.categoria;
+          botones.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
           filtrar();
         });
       });
 
-      // Inicial: marcar "todas"
-      botones.forEach(b => {
-        if ((b.dataset.categoria || "").toLowerCase() === "todas") {
-          b.classList.add("bg-white", "text-black");
-        }
-      });
+      // Botón inicial
+      botones[0].classList.add("active");
+    };
 
-      filtrar();
-    })();
+    setupFilters();
+    document.addEventListener('astro:after-swap', setupFilters);
   </script>
-
 </Layout>

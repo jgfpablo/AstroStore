@@ -5,351 +5,117 @@
   box-sizing: border-box;
 }
 
-a, button {
-  transition: all 0.25s ease;
-}
-
-body {
-  background: url("/src/assets/fondo.png") no-repeat center center fixed;
-  background-size: cover;
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color: #fff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.btn {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(90deg, #ff512f, #dd2476);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
-  border: 1px solid rgba(255,255,255,0.06);
-  text-decoration: none;
-}
-
-.btn:hover {
-  background: linear-gradient(90deg, #ff6a3d, #e83e8c);
-  transform: translateY(-2px);
-}
-
-.categoria-btn {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.12);
-  backdrop-filter: blur(6px) saturate(120%);
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-  color: #fff;
-  font-weight: 600;
-  padding: 0.5rem 1.25rem;
-  border-radius: 9999px;
-  transition: transform .25s ease, background .25s ease, color .25s ease;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-}
-
-.categoria-btn:hover {
-  transform: scale(1.05);
-  background: rgba(255,255,255,0.06);
-}
-
-.categoria-btn.active,
-.categoria-btn.bg-white {
-  background: rgba(255,255,255,1);
-  color: #0b0b0b;
-  border-color: rgba(0,0,0,0.06);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-}
-
-#searchInput {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(6px) saturate(120%);
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-  color: #fff;
-  padding: 0.75rem 1rem;
-  border-radius: 9999px;
-  width: 100%;
-  max-width: 48rem;
-  outline: none;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.45);
-}
-
-#searchInput::placeholder {
-  color: #fff
-}
-
-.product-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 1.25rem;
-  height: 28rem;
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px) saturate(120%);
-  -webkit-backdrop-filter: blur(10px) saturate(120%);
-  transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s ease;
-  display: flex;
-  flex-direction: column;
-}
-
-.product-item img {
-  width: 100%;
-  height: 100%;
-}
-
-.product-item::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.02) 0%,
-    rgba(0,0,0,0.08) 35%,
-    rgba(0,0,0,0.18) 65%,
-    rgba(0,0,0,0.34) 100%
-  );
-  mix-blend-mode: normal;
-  transition: background .28s ease;
-}
-
-.product-item > a > .absolute.inset-0 > .relative.z-10 {
-  z-index: 2;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.product-item h2 {
-  font-size: 1.125rem;
-  line-height: 1.1;
-  font-weight: 800;
-  color: #fff;
-  margin: 0;
-  text-shadow: 0 6px 18px rgba(0,0,0,0.6);
-}
-
-.product-item p {
-  margin: 0;
-  color: #d7ffd9;
-  font-weight: 800;
-  text-shadow: 0 6px 18px rgba(0,0,0,0.45);
-}
-
-.product-item .flex.flex-col.items-start {
-  z-index: 2;
-}
-
-.ver-mas,
-.product-item .ver-mas {
-  display: inline-block;
-  pointer-events: auto;
-  background: linear-gradient(90deg, rgba(255,120,60,0.95), rgba(220,50,140,0.95));
-  border-radius: 0.6rem;
-  padding: 0.5rem 1rem;
-  color: #fff;
-  font-weight: 700;
-  box-shadow: 0 10px 30px rgba(220,50,140,0.18);
-  border: 1px solid rgba(255,255,255,0.06);
-  transform: translateZ(0);
-  text-decoration: none;
-}
-
-.product-item .text-green-400 {
-  color: #7ee787;
-  font-weight: 800;
-  text-shadow: 0 6px 18px rgba(0,0,0,0.45);
-}
-
-.product-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 28px 70px rgba(0,0,0,0.6);
-}
-
-.product-item:hover img {
-  transform: scale(1.06);
-}
-
-.product-item:hover::after {
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.03) 0%,
-    rgba(0,0,0,0.06) 35%,
-    rgba(0,0,0,0.14) 65%,
-    rgba(0,0,0,0.28) 100%
-  );
-}
-
-@media (max-width: 768px) {
-  .product-item {
-    height: 24rem;
-    border-radius: 1rem;
-  }
-
-  .product-item h2 {
-    font-size: 1rem;
-  }
-
-  .ver-mas {
-    padding: 0.45rem 0.9rem;
-  }
-}
-
-input, textarea, select {
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.03);
-  color: #fff;
-  padding: 0.5rem 0.75rem;
-  backdrop-filter: blur(6px) saturate(120%);
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-}
-
-::placeholder {
-  color: rgba(255,255,255,0.55);
-}
-
-.hidden { display: none !important; }
-.inline-block { display: inline-block; }
-.rounded-2xl { border-radius: 1rem; }
-
-.product-item {
-  background: linear-gradient(135deg, #ff7a00, #ff4e8b);
-  color: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.product-item::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #ff7a00, #ff4e8b);
-  z-index: 0;
-  opacity: 0.6;
-}
-
-
-/* Reemplaza o añade estas reglas a tu archivo CSS */
-
-.product-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px; /* Bordes más sutiles como en la foto */
-  height: 28rem;
-  /* El fondo de la foto es un gradiente oscuro a rojizo/naranja */
-  background: linear-gradient(135deg, #1a1a2e 0%, #301b2e 40%, #8b2a1a 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease;
-}
-
-/* El botón naranja de la imagen */
-.ver-detalles-btn {
-  background: linear-gradient(to bottom, #ff9800, #f44336); /* Gradiente naranja a rojo */
-  color: white;
-  font-weight: 700;
-  padding: 10px 24px;
-  border-radius: 8px;
-  border: 1px solid #e65100;
-  box-shadow: 0 4px 0px #bf360c, 0 6px 15px rgba(0,0,0,0.4); /* Efecto 3D sutil */
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-  font-size: 1.1rem;
-}
-
-/* Ajuste del precio (Blanco puro y grande) */
-.precio-card {
-  color: #ffffff !important;
-  font-size: 1.8rem;
-  font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-/* Subtítulo "Diseños a medida" */
-.subtitulo-card {
-  color: rgba(255,255,255,0.8);
-  font-size: 0.9rem;
-  font-weight: 400;
-  margin-top: -4px;
-}
-
-
-/* Contenedor principal con el fondo degradado de la foto */
-.product-detail-container {
-  background: linear-gradient(135deg, #3d1b35 0%, #1a1a2e 50%, #8b2a1a 100%);
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-}
-
-/* Panel de detalles derecho (más oscuro y traslúcido) */
-.details-panel {
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(10px);
-}
-
-/* Botón "Comprar Ahora" con el estilo exacto de la imagen */
-.comprar-ahora-btn {
-  background: linear-gradient(to right, #9d1b5b, #ff4e3a);
-  color: white;
-  font-weight: 700;
-  font-size: 1.25rem;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 4px 15px rgba(255, 78, 58, 0.3);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.comprar-ahora-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
-  box-shadow: 0 8px 25px rgba(255, 78, 58, 0.4);
-}
-
-/* Estilo para los checks */
-li span {
-  font-weight: bold;
-  filter: drop-shadow(0 0 5px rgba(255, 152, 0, 0.5));
-}
-
-
-
-
-
 body {
   background: #0f0f1a url("/src/assets/fondo.png") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: #fff;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar personalizada para la web (opcional) */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.2);
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.2);
+/* --- ESTILOS DE LA PÁGINA PRINCIPAL (GRID) --- */
+
+.product-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  height: 30rem;
+  /* Degradado de la imagen de referencia */
+  background: linear-gradient(145deg, #1a1a2e 0%, #25162a 40%, #6e2114 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Clases de utilidad para el Glassmorphism global */
-.glass {
-  background: rgba(255, 255, 255, 0.03);
+.product-item:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.product-item img {
+  transition: transform 0.5s ease;
+}
+
+.product-item:hover img {
+  transform: scale(1.1) rotate(2deg);
+}
+
+/* Subtítulo debajo del nombre */
+.subtitulo-card {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+/* Precio Estilo Grande y Blanco */
+.precio-card {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 800;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+  letter-spacing: -1px;
+}
+
+/* Botones con estilo 3D (Ver Detalles / Comprar) */
+.ver-detalles-btn, .comprar-ahora-grid-btn {
+  display: inline-block;
+  background: linear-gradient(to bottom, #ff9800, #f44336);
+  color: white;
+  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: 1px solid #e65100;
+  box-shadow: 0 4px 0px #bf360c, 0 6px 15px rgba(0,0,0,0.4);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  font-size: 1.05rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ver-detalles-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0px #bf360c;
+}
+
+/* Variaciones de botones por color de la imagen */
+.btn-azul { background: linear-gradient(to bottom, #2196f3, #1565c0); border-color: #0d47a1; box-shadow: 0 4px 0px #0a2f6b, 0 6px 15px rgba(0,0,0,0.4); }
+.btn-morado { background: linear-gradient(to bottom, #9c27b0, #6a1b9a); border-color: #4a148c; box-shadow: 0 4px 0px #310d5e, 0 6px 15px rgba(0,0,0,0.4); }
+.btn-rojo { background: linear-gradient(to bottom, #f44336, #b71c1c); border-color: #7f0000; box-shadow: 0 4px 0px #5a0000, 0 6px 15px rgba(0,0,0,0.4); }
+
+/* --- CATEGORÍAS Y BUSCADOR --- */
+.categoria-btn {
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.categoria-btn.active {
+  background: #fff;
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+#searchInput {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+#searchInput:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ff9800;
+  box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
 }
