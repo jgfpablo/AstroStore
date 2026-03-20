@@ -6,13 +6,11 @@ export const prerender = false;
 
 const categoriaParam = normalizarCategoria(Astro.params.categoria);
 
-// 🔥 CATEGORÍAS FIJAS (EDITÁS ACÁ)
 const categorias = ["llaveros", "imanes", "toppers"];
 
 const allProducts = await getProducts();
 
-// 🎯 FILTRO
-let products = allProducts.filter(p => p.categoria === categoriaParam);
+const products = allProducts.filter(p => p.categoria === categoriaParam);
 ---
 
 <Layout title={`Categoría: ${categoriaParam}`}>
@@ -23,7 +21,6 @@ let products = allProducts.filter(p => p.categoria === categoriaParam);
     {categoriaParam}
   </h1>
 
-  <!-- NAV CATEGORÍAS -->
   <div class="flex justify-center mb-8 gap-2 flex-wrap">
     {categorias.map(cat => (
       <a 
@@ -39,35 +36,24 @@ let products = allProducts.filter(p => p.categoria === categoriaParam);
     ))}
   </div>
 
-  <!-- GRID -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
     {products.length > 0 ? (
       products.map(product => (
-        <a href={`/producto/${product.id}`}
-          class="group bg-gradient-to-br from-indigo-800/80 to-purple-800/80 
-                 p-5 rounded-2xl shadow-xl hover:scale-[1.02] transition">
+        <a href={`/producto/${product.id}`} class="bg-white/10 p-5 rounded-2xl">
 
-          <div class="flex flex-col md:flex-row items-center gap-6">
+          <img 
+            src={product.imagenes[0] || "https://via.placeholder.com/300"} 
+            class="w-full h-52 object-cover rounded-xl"
+          />
 
-            <div class="w-full md:w-60 h-52 overflow-hidden rounded-xl">
-              <img 
-                src={product.imagenes[0] || "https://via.placeholder.com/300"} 
-                class="w-full h-full object-cover"
-              />
-            </div>
+          <h2 class="text-xl font-bold mt-3">
+            {product.nombre}
+          </h2>
 
-            <div class="flex-1 text-center md:text-left">
-              <h2 class="text-xl font-bold">{product.nombre}</h2>
-              <p class="text-white/70 text-sm mt-1">
-                {product.descripcion.slice(0, 60)}...
-              </p>
-              <p class="text-2xl font-bold mt-2">
-                ${product.precio}
-              </p>
-            </div>
-
-          </div>
+          <p class="text-2xl font-bold mt-2">
+            ${product.precio}
+          </p>
 
         </a>
       ))
