@@ -9,113 +9,134 @@ body {
   background: #0f0f1a url("/src/assets/fondo.png") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   color: #fff;
-  -webkit-font-smoothing: antialiased;
 }
 
-/* --- ESTILOS DE LA PÁGINA PRINCIPAL (GRID) --- */
+/* --- NUEVA BARRA DE CATEGORÍAS UNIFICADA (Estilo Segmentado) --- */
 
+.categorias-unificadas-container {
+  display: flex; /* Pegamos los botones */
+  background: rgba(255, 255, 255, 0.04); /* Fondo traslúcido global */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08); /* Borde global suave */
+  border-radius: 999px; /* Bordes totalmente redondeados */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  overflow: hidden; /* Cortamos los bordes internos */
+}
+
+.categoria-btn {
+  background: transparent; /* Fondo transparente por defecto */
+  color: rgba(255, 255, 255, 0.7); /* Texto blanco suave */
+  padding: 12px 28px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  border: none;
+  cursor: pointer;
+  border-right: 1px solid rgba(255, 255, 255, 0.08); /* División interna */
+}
+
+/* Eliminamos la división para el último botón */
+.categoria-btn:last-child {
+  border-right: none;
+}
+
+.categoria-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+}
+
+/* --- ESTILO ACTIVO (Gradiente Naranja con Relieve) --- */
+.categoria-btn.active {
+  background: linear-gradient(180deg, #ff9800 0%, #f44336 100%); /* Gradiente naranja sólido */
+  color: #fff !important;
+  border-color: #e65100; /* Borde interno naranja */
+  box-shadow: 
+    0 4px 0px #bf360c,  /* Relieve 3D inferior */
+    inset 0 1px 1px rgba(255,255,255,0.2); /* Brillo interno superior */
+  border-radius: 999px; /* Forzamos el redondeado del elemento activo */
+  transform: translateY(-1px); /* Elevación suave */
+  z-index: 5; /* Aseguramos que el relieve no se corte */
+}
+
+/* --- BUSCADOR ESTILO NEON --- */
+.buscador-neon {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.buscador-neon:focus {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: #f44336; /* Color Neon */
+  box-shadow: 
+    0 0 10px rgba(244, 67, 54, 0.2),
+    0 0 25px rgba(244, 67, 54, 0.1); /* Efecto Brillo */
+}
+
+
+/* --- PRODUCT CARD (Más ancha) --- */
 .product-item {
   position: relative;
   overflow: hidden;
-  border-radius: 18px;
-  height: 30rem;
-  /* Degradado de la imagen de referencia */
+  border-radius: 24px;
+  min-height: 32rem;
   background: linear-gradient(145deg, #1a1a2e 0%, #25162a 40%, #6e2114 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .product-item:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.product-item img {
-  transition: transform 0.5s ease;
-}
-
-.product-item:hover img {
-  transform: scale(1.1) rotate(2deg);
-}
-
-/* Subtítulo debajo del nombre */
 .subtitulo-card {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 400;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
-/* Precio Estilo Grande y Blanco */
 .precio-card {
   color: #ffffff;
-  font-size: 2rem;
-  font-weight: 800;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-  letter-spacing: -1px;
+  font-size: 2.2rem;
+  font-weight: 900;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+  margin: 0;
 }
 
-/* Botones con estilo 3D (Ver Detalles / Comprar) */
-.ver-detalles-btn, .comprar-ahora-grid-btn {
-  display: inline-block;
+/* --- BOTONES CON ESTILO 3D --- */
+.ver-detalles-btn {
+  text-decoration: none;
   background: linear-gradient(to bottom, #ff9800, #f44336);
-  color: white;
-  font-weight: 700;
-  padding: 10px 24px;
-  border-radius: 10px;
+  color: white !important;
+  font-weight: 800;
+  padding: 14px 32px;
+  border-radius: 12px;
   border: 1px solid #e65100;
-  box-shadow: 0 4px 0px #bf360c, 0 6px 15px rgba(0,0,0,0.4);
+  box-shadow: 0 5px 0px #bf360c, 0 8px 20px rgba(0,0,0,0.4);
   text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   transition: all 0.2s ease;
-  cursor: pointer;
+  text-align: center;
+}
+
+.ver-detalles-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
 .ver-detalles-btn:active {
-  transform: translateY(3px);
+  transform: translateY(4px);
   box-shadow: 0 1px 0px #bf360c;
 }
 
-/* Variaciones de botones por color de la imagen */
-.btn-azul { background: linear-gradient(to bottom, #2196f3, #1565c0); border-color: #0d47a1; box-shadow: 0 4px 0px #0a2f6b, 0 6px 15px rgba(0,0,0,0.4); }
-.btn-morado { background: linear-gradient(to bottom, #9c27b0, #6a1b9a); border-color: #4a148c; box-shadow: 0 4px 0px #310d5e, 0 6px 15px rgba(0,0,0,0.4); }
-.btn-rojo { background: linear-gradient(to bottom, #f44336, #b71c1c); border-color: #7f0000; box-shadow: 0 4px 0px #5a0000, 0 6px 15px rgba(0,0,0,0.4); }
-
-/* --- CATEGORÍAS Y BUSCADOR --- */
-.categoria-btn {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  padding: 8px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.categoria-btn.active {
-  background: #fff;
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
-
-#searchInput {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: white;
-  transition: all 0.3s ease;
-}
-
-#searchInput:focus {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #ff9800;
-  box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
-}
+.btn-morado { background: linear-gradient(to bottom, #9c27b0, #6a1b9a); border-color: #4a148c; box-shadow: 0 5px 0px #310d5e, 0 8px 20px rgba(0,0,0,0.4); }
+.btn-rojo { background: linear-gradient(to bottom, #f44336, #b71c1c); border-color: #7f0000; box-shadow: 0 5px 0px #5a0000, 0 8px 20px rgba(0,0,0,0.4); }

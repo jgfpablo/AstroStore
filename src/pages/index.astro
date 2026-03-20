@@ -3,71 +3,81 @@ import Layout from "../layouts/Layout.astro";
 import { getProducts } from "../lib/sheets";
 
 const products = await getProducts();
-const categorias = ["Todos", "Toppers", "Escudos", "Llaveros", "Multicolor"];
+// Definimos las categorías como un objeto para manejar el texto visible y el ID de filtro
+const categoriasDefinidas = [
+  { id: "todos", texto: "Todos" },
+  { id: "toppers", texto: "Toppers" },
+  { id: "escudos", texto: "Escudos" },
+  { id: "multicolor", texto: "Multicolor" }
+];
 ---
 
 <Layout title="Catálogo 3D">
-
   <div class="max-w-7xl mx-auto py-10 px-4">
     <h1 class="text-4xl md:text-6xl font-black text-center mb-10 text-white tracking-tighter uppercase">
       Catálogo Exclusivo
     </h1>
 
-    <div class="flex justify-center mb-8 gap-4 flex-wrap">
-      {categorias.map(cat => (
-        <button
-          class="categoria-btn hover:scale-105"
-          data-categoria={cat.toLowerCase()}
-        >
-          {cat}
-        </button>
-      ))}
+    <div class="flex justify-center mb-12 px-4">
+      <nav class="categorias-unificadas-container">
+        {categoriasDefinidas.map((cat, index) => (
+          <button
+            class={`categoria-btn ${index === 0 ? 'active' : ''}`}
+            data-categoria={cat.id}
+          >
+            {cat.texto}
+          </button>
+        ))}
+      </nav>
     </div>
 
-    <form id="searchForm" class="flex justify-center mb-16 px-4">
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="¿Qué estás buscando hoy?..."
-        class="w-full max-w-2xl px-6 py-4 rounded-2xl outline-none text-lg shadow-2xl"
-      />
-    </form>
+    <div class="flex justify-center mb-16 px-4">
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="¿Qué estás buscando hoy?..."
+            class="w-full max-w-2xl px-6 py-4 rounded-2xl outline-none text-lg shadow-2xl buscador-neon"
+        />
+    </div>
 
-    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
       {products.map(product => (
         <div
-          class="product-item p-7"
+          class="product-item p-8"
           data-nombre={String(product.nombre || "").toLowerCase()}
           data-categoria={String(product.categoria || "").toLowerCase()}
         >
-          <a href={`/producto/${product.id}`} class="absolute inset-0 z-0"></a>
-
           <div class="relative z-10 mb-2">
-            <h2 class="text-2xl font-extrabold text-white leading-none tracking-tight">
+            <h2 class="text-3xl font-extrabold text-white leading-tight tracking-tight">
               {product.nombre}
             </h2>
-            <p class="subtitulo-card">{product.categoria === 'toppers' ? 'Diseños a Medida' : 'Accesorios 3D'}</p>
+            <p class="subtitulo-card text-lg">
+              {product.categoria === 'toppers' ? 'Diseños a Medida' : 'Accesorios 3D de Alta Calidad'}
+            </p>
           </div>
 
-          <div class="flex-1 flex items-center justify-center p-4 relative z-0">
+          <div class="flex-1 flex items-center justify-center p-6 relative">
             <img
               src={product.imagenes?.[0] || "https://via.placeholder.com/400"}
               alt={product.nombre}
-              class="max-h-52 w-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)]"
+              class="max-h-64 w-auto object-contain drop-shadow-[0_25px_40px_rgba(0,0,0,0.7)]"
             />
           </div>
 
-          <div class="relative z-10 mt-4">
-            <p class="precio-card mb-4">${product.precio}.00</p>
+          <div class="relative z-10 mt-6 flex flex-col gap-4">
+            <p class="precio-card">${product.precio}.00</p>
             
             <div class="flex">
-                <span class={`ver-detalles-btn ${
+                <a 
+                  href={`/producto/${product.id}`} 
+                  class={`ver-detalles-btn no-underline inline-block ${
                     product.categoria === 'llaveros' ? 'btn-morado' : 
                     product.categoria === 'escudos' ? 'btn-rojo' : ''
-                }`}>
+                  }`}
+                >
                   {product.categoria === 'llaveros' ? 'Ver Más' : 
                    product.categoria === 'toppers' ? 'Ver Detalles' : 'Comprar Ahora'}
-                </span>
+                </a>
             </div>
           </div>
         </div>
@@ -84,7 +94,7 @@ const categorias = ["Todos", "Toppers", "Escudos", "Llaveros", "Multicolor"];
       let catActual = "todos";
 
       const filtrar = () => {
-        const busqueda = (input.value || "").toLowerCase().trim();
+        const busqueda = (input?.value || "").toLowerCase().trim();
         items.forEach(item => {
           const nombre = item.dataset.nombre || "";
           const categoria = item.dataset.categoria || "";
@@ -95,7 +105,7 @@ const categorias = ["Todos", "Toppers", "Escudos", "Llaveros", "Multicolor"];
         });
       };
 
-      input.addEventListener("input", filtrar);
+      input?.addEventListener("input", filtrar);
 
       botones.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -105,9 +115,6 @@ const categorias = ["Todos", "Toppers", "Escudos", "Llaveros", "Multicolor"];
           filtrar();
         });
       });
-
-      // Botón inicial
-      botones[0].classList.add("active");
     };
 
     setupFilters();
