@@ -4,28 +4,70 @@
   scroll-behavior: smooth;
 }
 
-/* body {
-  font-family: system-ui, -apple-system, sans-serif;
-} */
-
-/* animaciones */
 a, button {
   transition: all 0.25s ease;
 }
 
-/* glass effect */
-/* .glass {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-} */
 
-/* mobile fix */
-/* img {
-  max-width: 100%;
-  height: auto;
-} */
-
-body {
-  background: radial-gradient(circle at top, #ff7e5f, #6a11cb);
+ body {
+  background: url("/src/assets/fondo.jpg") no-repeat center center fixed;
+  background-size: cover;
   min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
 }
+
+/* Cards estilo glasmorphism */
+.card {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 300px; /* 🔥 altura fija para cuadrado */
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(to right, #ff512f, #dd2476);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.btn:hover {
+  background: linear-gradient(to right, #ff6a3d, #e83e8c);
+  transform: translateY(-2px);
+}
+
+/* Categorías */
+.categoria-btn {
+    background: rgba(0, 0, 0, 0.623);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.categoria-btn:hover {
+    background: rgba(0, 0, 0, 0.895);
+  transform: scale(1.05);
+}
+
+.categoria-btn.active {
+  background: white;
+  color: black;
+}
+input{
+      background: rgba(0, 0, 0, 0.623);
+}
+
