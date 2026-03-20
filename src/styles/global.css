@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* ---------------------------
-   Estilos globales y fondo
-   --------------------------- */
 * {
   scroll-behavior: smooth;
   box-sizing: border-box;
@@ -22,9 +19,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------------------------
-   Botones generales
-   --------------------------- */
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -42,9 +36,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* ---------------------------
-   Categorías (botones)
-   --------------------------- */
 .categoria-btn {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.12);
@@ -71,9 +62,6 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.25);
 }
 
-/* ---------------------------
-   Input buscador
-   --------------------------- */
 #searchInput {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
@@ -92,10 +80,6 @@ body {
   color: #fff
 }
 
-/* ---------------------------
-   Cards estilo glasmorphism
-   --------------------------- */
-/* Base de la card */
 .product-item {
   position: relative;
   overflow: hidden;
@@ -110,15 +94,11 @@ body {
   flex-direction: column;
 }
 
-/* Imagen (contenedor) */
-
-/* Imagen propiamente dicha */
 .product-item img {
   width: 100%;
   height: 100%;
 }
 
-/* Overlay suave con pseudo-elemento para evitar cortes bruscos */
 .product-item::after {
   content: "";
   position: absolute;
@@ -136,7 +116,6 @@ body {
   transition: background .28s ease;
 }
 
-/* Contenido encima del overlay */
 .product-item > a > .absolute.inset-0 > .relative.z-10 {
   z-index: 2;
   height: 100%;
@@ -145,7 +124,6 @@ body {
   justify-content: space-between;
 }
 
-/* Título y textos */
 .product-item h2 {
   font-size: 1.125rem;
   line-height: 1.1;
@@ -162,12 +140,10 @@ body {
   text-shadow: 0 6px 18px rgba(0,0,0,0.45);
 }
 
-/* Contenedor inferior (precio + botón) */
 .product-item .flex.flex-col.items-start {
   z-index: 2;
 }
 
-/* Botón "Ver más" estilo vidrio cálido */
 .ver-mas,
 .product-item .ver-mas {
   display: inline-block;
@@ -183,21 +159,17 @@ body {
   text-decoration: none;
 }
 
-/* Precio */
 .product-item .text-green-400 {
   color: #7ee787;
   font-weight: 800;
   text-shadow: 0 6px 18px rgba(0,0,0,0.45);
 }
 
-/* Hover effects */
 .product-item:hover {
   transform: translateY(-8px);
   box-shadow: 0 28px 70px rgba(0,0,0,0.6);
 }
 
-
-/* hover de la iamgen hace mas grande o mas chica */
 .product-item:hover img {
   transform: scale(1.06);
 }
@@ -212,9 +184,6 @@ body {
   );
 }
 
-/* ---------------------------
-   Accesibilidad y responsividad
-   --------------------------- */
 @media (max-width: 768px) {
   .product-item {
     height: 24rem;
@@ -230,9 +199,6 @@ body {
   }
 }
 
-/* ---------------------------
-   Inputs y elementos pequeños
-   --------------------------- */
 input, textarea, select {
   border-radius: 0.75rem;
   border: 1px solid rgba(255,255,255,0.06);
@@ -243,19 +209,13 @@ input, textarea, select {
   -webkit-backdrop-filter: blur(6px) saturate(120%);
 }
 
-/* Placeholder color consistente */
 ::placeholder {
   color: rgba(255,255,255,0.55);
 }
 
-/* ---------------------------
-   Utilidades pequeñas
-   --------------------------- */
 .hidden { display: none !important; }
 .inline-block { display: inline-block; }
 .rounded-2xl { border-radius: 1rem; }
-
-
 
 .product-item {
   background: linear-gradient(135deg, #ff7a00, #ff4e8b);
@@ -263,7 +223,6 @@ input, textarea, select {
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-
 }
 
 .product-item::before {
@@ -273,4 +232,48 @@ input, textarea, select {
   background: linear-gradient(135deg, #ff7a00, #ff4e8b);
   z-index: 0;
   opacity: 0.6;
+}
+
+
+/* Reemplaza o añade estas reglas a tu archivo CSS */
+
+.product-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px; /* Bordes más sutiles como en la foto */
+  height: 28rem;
+  /* El fondo de la foto es un gradiente oscuro a rojizo/naranja */
+  background: linear-gradient(135deg, #1a1a2e 0%, #301b2e 40%, #8b2a1a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+/* El botón naranja de la imagen */
+.ver-detalles-btn {
+  background: linear-gradient(to bottom, #ff9800, #f44336); /* Gradiente naranja a rojo */
+  color: white;
+  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: 1px solid #e65100;
+  box-shadow: 0 4px 0px #bf360c, 0 6px 15px rgba(0,0,0,0.4); /* Efecto 3D sutil */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  font-size: 1.1rem;
+}
+
+/* Ajuste del precio (Blanco puro y grande) */
+.precio-card {
+  color: #ffffff !important;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Subtítulo "Diseños a medida" */
+.subtitulo-card {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-top: -4px;
 }

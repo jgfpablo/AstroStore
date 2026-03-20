@@ -50,66 +50,38 @@ const categorias = ["todas", "llaveros", "imanes", "toppers"];
   <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-0">
 
     {products.map(product => (
-      <div
-        class="product-item relative overflow-hidden rounded-2xl shadow-2xl transition duration-300"
-        style="height: 28rem;"
-        data-nombre={String(product.nombre || "").toLowerCase().trim()}
-        data-categoria={product.categoria}
-      >
+     <div
+  class="product-item relative p-6 flex flex-col justify-between"
+  data-nombre={String(product.nombre || "").toLowerCase().trim()}
+  data-categoria={product.categoria}
+>
+  <a href={`/producto/${product.id}`} class="absolute inset-0 z-0"></a>
 
-        <!-- Envolvemos todo en un enlace para que la card sea clicable -->
-        <a href={`/producto/${product.id}`} class="block relative w-full h-full">
+  <div class="relative z-10">
+    <h2 class="text-2xl font-bold text-white leading-tight">
+      {product.nombre}
+    </h2>
+    <p class="subtitulo-card">Diseños a Medida</p>
+  </div>
 
-          <!-- IMAGEN ocupa 80% del alto del card y está centrada -->
-          <div class="w-full h-[70%] flex items-center ">
-            <img
-              src={product.imagenes && product.imagenes.length ? product.imagenes[0] : "https://via.placeholder.com/800x800"}
-              alt={product.nombre || "Producto"}
-              class="w-full h-full object-cover object-center"
-            />
-          </div>
+  <div class="flex-1 flex items-center justify-center my-4">
+    <img
+      src={product.imagenes?.[0] || "https://via.placeholder.com/800x800"}
+      alt={product.nombre}
+      class="max-h-full w-auto object-contain drop-shadow-2xl"
+    />
+  </div>
 
-          <!-- INFO superpuesta sobre la imagen y el resto del card -->
-          <div class="absolute inset-0 pointer-events-none">
-            <!-- gradiente para mejorar legibilidad: transparente arriba, oscuro abajo -->
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/70"></div>
-
-            <!-- contenido colocado con flex para ubicar título arriba y precio+botón abajo -->
-            <div class="relative z-10 h-full flex flex-col justify-between p-5">
-
-              <!-- Título arriba a la izquierda -->
-              <div class="flex items-start">
-                <h2 class="text-lg md:text-xl font-bold text-white drop-shadow mb-0">
-                  {product.nombre}
-                </h2>
-              </div>
-
-              <!-- Espacio central (puedes usarlo para etiquetas, stock, etc.) -->
-              <div class="flex-1"></div>
-
-              <!-- Precio sobre el botón, ambos alineados abajo a la izquierda -->
-              <div class="flex flex-col items-start gap-2 pointer-events-auto">
-                <p class="text-xl md:text-2xl font-extrabold text-green-400">
-                  ${product.precio}
-                </p>
-
-                <!-- Usamos un span estilizado en lugar de un botón real para evitar elementos interactivos anidados -->
-                <span
-                  class="px-4 py-2 rounded-lg 
-                         bg-gradient-to-r from-orange-500 to-pink-500 
-                         hover:from-orange-600 hover:to-pink-600
-                         text-white font-semibold shadow-lg transition inline-block"
-                >
-                  Ver más
-                </span>
-              </div>
-
-            </div>
-          </div>
-
-        </a>
-
-      </div>
+  <div class="relative z-10 flex flex-col gap-3">
+    <p class="precio-card">${product.precio}.00</p>
+    
+    <div class="flex">
+        <span class="ver-detalles-btn">
+          Ver Detalles
+        </span>
+    </div>
+  </div>
+</div>
     ))}
 
   </div>
@@ -174,7 +146,6 @@ const categorias = ["todas", "llaveros", "imanes", "toppers"];
         }
       });
 
-      // Ejecutar filtro inicial para respetar búsqueda vacía / categoría por defecto
       filtrar();
     })();
   </script>
