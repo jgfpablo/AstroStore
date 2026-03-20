@@ -12,14 +12,14 @@ const categoriasDefinidas = [
 ];
 ---
 
-<Layout title="Catálogo 3D">
-  <div class="max-w-7xl mx-auto py-10 px-4">
-    <h1 class="text-4xl md:text-6xl font-black text-center mb-10 text-white tracking-tighter uppercase">
+<Layout title="Catálogo Noctura">
+  <div class="max-w-7xl mx-auto py-6 md:py-10 px-4">
+    <h1 class="text-3xl md:text-6xl font-black text-center mb-8 text-white tracking-tighter uppercase leading-none">
       Catálogo Exclusivo
     </h1>
 
-    <div class="flex justify-center mb-12 px-4">
-      <nav class="categorias-unificadas-container">
+    <div class="flex justify-center mb-10 px-2">
+      <nav class="categorias-unificadas-container scroll-hide">
         {categoriasDefinidas.map((cat, index) => (
           <button
             class={`categoria-btn ${index === 0 ? 'active' : ''}`}
@@ -31,48 +31,48 @@ const categoriasDefinidas = [
       </nav>
     </div>
 
-    <div class="flex justify-center mb-16 px-4">
-      <div class="search-box-vibrant">
+    <div class="flex justify-center mb-12 px-2">
+      <div class="search-box-vibrant w-full max-w-md">
         <span class="search-icon">🔍</span>
         <input
           id="searchInput"
           type="text"
-          placeholder="Buscar producto por nombre..."
+          placeholder="Buscar producto..."
           class="input-neon"
         />
       </div>
     </div>
 
-    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
       {products.map(product => (
         <div
-          class="product-item p-8 flex flex-col"
+          class="product-item p-6 md:p-8 flex flex-col"
           data-nombre={String(product.nombre || "").toLowerCase()}
           data-categoria={String(product.categoria || "").toLowerCase()}
         >
           <div class="relative z-10 mb-2">
-            <h2 class="text-3xl font-extrabold text-white leading-tight tracking-tight">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-white leading-tight tracking-tight">
               {String(product.nombre || "")}
             </h2>
-            <p class="subtitulo-card text-lg">
-              {product.categoria === 'toppers' ? 'Diseños a Medida' : 'Accesorios 3D de Alta Calidad'}
+            <p class="subtitulo-card text-sm md:text-lg">
+              {product.categoria === 'toppers' ? 'Diseños a Medida' : 'Accesorios 3D'}
             </p>
           </div>
 
-          <div class="flex-1 flex items-center justify-center p-6 relative">
+          <div class="flex-1 flex items-center justify-center p-4 relative">
             <img
               src={product.imagenes?.[0] || "https://via.placeholder.com/400"}
               alt={product.nombre}
-              class="max-h-64 w-auto object-contain drop-shadow-[0_25px_40px_rgba(0,0,0,0.7)]"
+              class="max-h-48 md:max-h-64 w-auto object-contain drop-shadow-2xl"
             />
           </div>
 
-          <div class="relative z-10 mt-6 flex flex-col gap-4">
-            <p class="precio-card">${product.precio}.00</p>
+          <div class="relative z-10 mt-4 flex flex-col gap-4">
+            <p class="precio-card text-2xl md:text-3xl">${product.precio}.00</p>
             <div class="flex justify-center">
               <a 
                 href={`/producto/${product.id}`} 
-                class="ver-detalles-btn no-underline inline-block w-full text-center"
+                class="ver-detalles-btn no-underline inline-block w-full text-center py-3"
               >
                 Ver Detalles
               </a>
@@ -82,25 +82,27 @@ const categoriasDefinidas = [
       ))}
     </div>
 
-    <div id="paginationControls" class="pagination-container">
-  <button id="prevPage" class="pagination-btn-vibrant" title="Anterior">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    <span>Anterior</span>
-  </button>
-  
-  <div class="page-indicator">
-    <span class="current-label">PÁGINA</span>
-    <span id="pageInfo" class="page-number">1 / 1</span>
-  </div>
+    <div id="paginationControls" class="pagination-container-responsive">
+      <button id="prevPage" class="pagination-btn-vibrant-sm" title="Anterior">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span class="hidden sm:inline">Anterior</span>
+      </button>
+      
+      <div class="page-indicator-mobile">
+        <span class="current-label">PÁGINA</span>
+        <span id="pageInfo" class="page-number-sm">1 / 1</span>
+      </div>
 
-  <button id="nextPage" class="pagination-btn-vibrant" title="Siguiente">
-    <span>Siguiente</span>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-  </button>
-</div>
+      <button id="nextPage" class="pagination-btn-vibrant-sm" title="Siguiente">
+        <span class="hidden sm:inline">Siguiente</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
   </div>
 
   <script>
+    // Tu lógica de JS anterior se mantiene igual (setupCatalog), 
+    // solo asegúrate de que el pageInfo.textContent use "/" para ahorrar espacio
     const setupCatalog = () => {
       const input = document.getElementById("searchInput");
       const items = Array.from(document.querySelectorAll(".product-item"));
@@ -115,64 +117,40 @@ const categoriasDefinidas = [
 
       const updatePagination = () => {
         const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 1;
-        
         if (currentPage > totalPages) currentPage = totalPages;
         if (currentPage < 1) currentPage = 1;
 
         items.forEach(item => item.style.display = "none");
-
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        const end = start + ITEMS_PER_PAGE;
-        
-        filteredItems.slice(start, end).forEach(item => item.style.display = "flex");
+        filteredItems.slice(start, start + ITEMS_PER_PAGE).forEach(item => item.style.display = "flex");
 
-        pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+        pageInfo.textContent = `${currentPage} / ${totalPages}`;
         prevBtn.disabled = currentPage === 1;
         nextBtn.disabled = currentPage === totalPages;
-        
         prevBtn.style.opacity = prevBtn.disabled ? "0.3" : "1";
         nextBtn.style.opacity = nextBtn.disabled ? "0.3" : "1";
       };
 
       const filtrar = () => {
         const busqueda = (input?.value || "").toLowerCase().trim();
-        const activeBtn = document.querySelector(".categoria-btn.active");
-        const catActual = activeBtn ? activeBtn.dataset.categoria : "todos";
-
+        const catActual = document.querySelector(".categoria-btn.active")?.dataset.categoria || "todos";
         filteredItems = items.filter(item => {
           const nombre = item.dataset.nombre || "";
           const categoria = item.dataset.categoria || "";
-          const coincideTexto = nombre.includes(busqueda);
-          const coincideCat = catActual === "todos" || categoria === catActual;
-          return coincideTexto && coincideCat;
+          return nombre.includes(busqueda) && (catActual === "todos" || categoria === catActual);
         });
-
         currentPage = 1;
         updatePagination();
       };
 
       input?.addEventListener("input", filtrar);
-
-      botones.forEach(btn => {
-        btn.addEventListener("click", () => {
-          botones.forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          filtrar();
-        });
-      });
-
-      nextBtn.onclick = () => {
-        currentPage++;
-        updatePagination();
-        window.scrollTo({ top: 200, behavior: 'smooth' });
-      };
-
-      prevBtn.onclick = () => {
-        currentPage--;
-        updatePagination();
-        window.scrollTo({ top: 200, behavior: 'smooth' });
-      };
-
+      botones.forEach(btn => btn.addEventListener("click", () => {
+        botones.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        filtrar();
+      }));
+      nextBtn.onclick = () => { currentPage++; updatePagination(); window.scrollTo({ top: 300, behavior: 'smooth' }); };
+      prevBtn.onclick = () => { currentPage--; updatePagination(); window.scrollTo({ top: 300, behavior: 'smooth' }); };
       filtrar();
     };
 
@@ -181,100 +159,68 @@ const categoriasDefinidas = [
   </script>
 
   <style>
-    .pagination-btn {
-      background: rgba(255, 255, 255, 0.05);
+    /* CATEGORÍAS RESPONSIVE */
+    .categorias-unificadas-container {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.5rem;
+      max-width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+    .scroll-hide::-webkit-scrollbar { display: none; }
+
+    /* PAGINACIÓN RESPONSIVE */
+    .pagination-container-responsive {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pagination-btn-vibrant-sm {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
       color: white;
-      padding: 10px 25px;
+      border: none;
+      padding: 10px 16px;
       border-radius: 12px;
-      font-weight: 600;
-      transition: all 0.3s ease;
+      font-weight: 700;
       cursor: pointer;
+      font-size: 0.9rem;
     }
-    .pagination-btn:hover:not(:disabled) {
-      background: #f97316;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
+
+    .page-indicator-mobile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 80px;
     }
-    .pagination-btn:disabled { cursor: not-allowed; }
+
+    .page-number-sm {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: white;
+    }
+
+    .current-label {
+      font-size: 0.6rem;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 1px;
+    }
+
+    /* Ajustes específicos para móviles muy pequeños */
+    @media (max-width: 480px) {
+      .pagination-btn-vibrant-sm { padding: 12px; }
+      .page-number-sm { font-size: 1rem; }
+    }
   </style>
 </Layout>
-
-
-
-
-<style>
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    margin: 4rem 0;
-    padding: 1.5rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 24px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .pagination-btn-vibrant {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 14px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 10px 20px rgba(234, 88, 12, 0.3);
-  }
-
-  .pagination-btn-vibrant:hover:not(:disabled) {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 15px 25px rgba(234, 88, 12, 0.5);
-    filter: brightness(1.1);
-  }
-
-  .pagination-btn-vibrant:active:not(:disabled) {
-    transform: translateY(0);
-  }
-
-  .pagination-btn-vibrant:disabled {
-    background: #444;
-    box-shadow: none;
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(1);
-  }
-
-  .page-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 120px;
-  }
-
-  .current-label {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.5);
-    font-weight: 900;
-    letter-spacing: 2px;
-  }
-
-  .page-number {
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: white;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  }
-
-  @media (max-width: 640px) {
-    .pagination-btn-vibrant span { display: none; }
-    .pagination-container { gap: 1rem; padding: 1rem; }
-  }
-</style>
