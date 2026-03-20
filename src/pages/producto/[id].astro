@@ -5,50 +5,198 @@ import { getProducts } from "../../lib/sheets";
 export const prerender = false;
 
 const id = Astro.params.id;
-
 const products = await getProducts();
 const product = products.find(p => String(p.id) === id);
+
+// Simulamos un array de imágenes si solo viene una, para que se vea la galería
+const imagenes = product?.imagenes || ["https://via.placeholder.com/600"];
 ---
 
 <Layout title={product?.nombre || "Producto"}>
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <a href="/" class="text-white/60 hover:text-white transition mb-6 inline-block">← Volver al catálogo</a>
 
-  <a href="/" class="text-white/80 hover:underline">← Volver</a>
+    {product ? (
+      <div class="product-detail-container overflow-hidden">
+        <div class="grid md:grid-cols-2">
+          
+          <div class="p-8 flex flex-col items-center justify-center bg-gradient-to-br from-purple-900/10 to-transparent">
+             <div class="relative w-full aspect-square flex items-center justify-center mb-8">
+                <img 
+                  id="mainImage"
+                  src={imagenes[0]} 
+                  alt={product.nombre}
+                  class="max-w-full max-h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-opacity duration-300"
+                />
+             </div>
+             
+             <div class="relative w-full group">
+                <button id="prevBtn" class="nav-arrow left-0" aria-label="Anterior">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-6 h-6"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                
+                <button id="nextBtn" class="nav-arrow right-0" aria-label="Siguiente">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-6 h-6"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
 
-  {product ? (
-    <div class="grid md:grid-cols-2 gap-8 mt-6">
+                <div id="thumbScroll" class="flex gap-3 w-full overflow-hidden px-12 py-2 scroll-smooth">
+                  {imagenes.map((img) => (
+                    <div class="thumb-card flex-shrink-0 cursor-pointer">
+                      <img src={img} class="w-full h-full object-cover" onclick={`document.getElementById('mainImage').src='${img}'`} />
+                    </div>
+                  ))}
+                </div>
+             </div>
+          </div>
 
-      <div class="bg-white/10 rounded-2xl p-4 backdrop-blur">
-        <img 
-          src={product.imagenes[0] || "https://via.placeholder.com/400"} 
-          class="w-full h-80 object-contain"
-        />
+          <div class="details-panel p-8 md:p-12 flex flex-col justify-between border-l border-white/10">
+            <div>
+              <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h1 class="text-4xl font-extrabold text-white leading-tight uppercase tracking-tighter">
+                    {product.nombre}
+                    </h1>
+                    <p class="text-orange-400 font-medium mt-1">Categoría: {product.categoria}</p>
+                </div>
+                <p class="text-4xl font-black text-white">
+                  ${product.precio}
+                </p>
+              </div>
+
+              <button class="comprar-ahora-btn w-full mb-10">
+                Comprar Ahora
+              </button>
+
+              <div class="space-y-6">
+                <p class="text-xl text-white/90 font-semibold italic">
+                  "Hecho a medida con tu nombre y edad"
+                </p>
+
+                <ul class="space-y-5 text-white/80 text-lg">
+                  <li class="flex items-center gap-4">
+                    <span class="check-icon">✓</span> Impresión 3D de alta calidad
+                  </li>
+                  <li class="flex items-center gap-4">
+                    <span class="check-icon">✓</span> Ideal para tartas de cumpleaños
+                  </li>
+                  <li class="flex items-center gap-4">
+                    <span class="check-icon">✓</span> Entrega rápida y segura
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="mt-12 pt-6 border-t border-white/5 flex items-center gap-3">
+              <div class="flex text-orange-400">★★★★★</div>
+              <span class="text-white/30 text-sm font-medium">(12 reseñas verificadas)</span>
+            </div>
+          </div>
+
+        </div>
       </div>
-
-      <div>
-        <h1 class="text-3xl md:text-4xl font-bold">
-          {product.nombre}
-        </h1>
-
-        <p class="text-3xl mt-3 font-bold text-green-300">
-          ${product.precio}
-        </p>
-
-        <p class="mt-2 text-sm text-white/60">
-          Categoría: {product.categoria}
-        </p>
-
-        <p class="mt-4 text-white/80">
-          {product.descripcion}
-        </p>
-
-        <button class="mt-6 w-full bg-pink-500 hover:bg-pink-600 py-3 rounded-xl font-bold transition">
-          Comprar
-        </button>
+    ) : (
+      <div class="text-center py-20">
+        <p class="text-2xl text-white/20">Producto no encontrado</p>
       </div>
-
-    </div>
-  ) : (
-    <p class="text-center mt-10">Producto no encontrado</p>
-  )}
-
+    )}
+  </div>
 </Layout>
+
+<script>
+  // Script para el scroll de las flechas
+  const setupGallery = () => {
+    const scrollContainer = document.getElementById('thumbScroll');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (scrollContainer && prevBtn && nextBtn) {
+      prevBtn.onclick = () => scrollContainer.scrollBy({ left: -150, behavior: 'smooth' });
+      nextBtn.onclick = () => scrollContainer.scrollBy({ left: 150, behavior: 'smooth' });
+    }
+  };
+
+  // Ejecutar en carga inicial y tras navegaciones de Astro
+  setupGallery();
+  document.addEventListener('astro:after-swap', setupGallery);
+</script>
+
+<style>
+  .product-detail-container {
+    background: linear-gradient(145deg, #2d162a 0%, #121225 50%, #6e2114 100%);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+  }
+
+  .details-panel {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+  }
+
+  .comprar-ahora-btn {
+    background: linear-gradient(90deg, #8e1a53 0%, #ff4b38 100%);
+    color: white;
+    font-weight: 800;
+    font-size: 1.3rem;
+    padding: 16px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(255, 75, 56, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .comprar-ahora-btn:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.15);
+    box-shadow: 0 15px 35px rgba(255, 75, 56, 0.35);
+  }
+
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+
+  .group:hover .nav-arrow {
+    opacity: 1;
+  }
+
+  .nav-arrow:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .thumb-card {
+    width: 85px;
+    height: 85px;
+    border-radius: 14px;
+    border: 2px solid rgba(249, 115, 22, 0.3);
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .thumb-card:hover {
+    border-color: #f97316;
+    transform: scale(1.05);
+  }
+
+  .check-icon {
+    color: #f97316;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+  }
+</style>
