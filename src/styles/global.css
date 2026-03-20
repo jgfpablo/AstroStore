@@ -4,9 +4,9 @@
   scroll-behavior: smooth;
 }
 
-body {
+/* body {
   font-family: system-ui, -apple-system, sans-serif;
-}
+} */
 
 /* animaciones */
 a, button {
@@ -14,13 +14,18 @@ a, button {
 }
 
 /* glass effect */
-.glass {
+/* .glass {
   background: rgba(255,255,255,0.1);
   backdrop-filter: blur(10px);
-}
+} */
 
 /* mobile fix */
-img {
+/* img {
   max-width: 100%;
   height: auto;
+} */
+
+body {
+  background: radial-gradient(circle at top, #ff7e5f, #6a11cb);
+  min-height: 100vh;
 }

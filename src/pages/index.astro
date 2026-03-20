@@ -11,16 +11,18 @@ const categorias = ["todas", "llaveros", "imanes", "toppers"];
 
 <Layout title="Catálogo">
 
-  <h1 class="text-3xl md:text-5xl font-extrabold text-center mb-8">
+  <h1 class="text-3xl md:text-5xl font-extrabold text-center mb-8 text-white">
     Nuestros Productos
   </h1>
 
   <!-- 🏷️ CATEGORÍAS -->
-  <div class="flex justify-center mb-6 gap-2 flex-wrap">
+  <div class="flex justify-center mb-6 gap-3 flex-wrap">
     {categorias.map(cat => (
       <button
-        class="categoria-btn px-4 py-2 rounded-full border border-white/20 
-               bg-white/10 hover:bg-white/20 transition"
+        class="categoria-btn px-5 py-2 rounded-full 
+               bg-white/10 backdrop-blur border border-white/20 
+               hover:bg-white/20 hover:scale-105 
+               transition text-sm font-medium text-white"
         data-categoria={cat}
       >
         {cat}
@@ -34,20 +36,25 @@ const categorias = ["todas", "llaveros", "imanes", "toppers"];
       id="searchInput"
       type="text"
       placeholder="Buscar producto... (ej: poke)"
-      class="w-full max-w-xl px-4 py-3 rounded-xl 
+      class="w-full max-w-xl px-5 py-3 rounded-full 
              bg-white/10 border border-white/20 
              text-white placeholder-white/50
-             focus:outline-none focus:ring-2 focus:ring-pink-500"
+             backdrop-blur
+             focus:outline-none focus:ring-2 focus:ring-pink-500
+             shadow-lg"
     />
   </form>
 
   <!-- GRID -->
-  <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
     {products.map(product => (
       <div 
-        class="product-item group bg-gradient-to-br from-indigo-800/80 to-purple-800/80 
-               p-5 rounded-2xl shadow-xl transition"
+        class="product-item group relative overflow-hidden 
+               bg-gradient-to-br from-[#1f1c2c] via-[#2a0845] to-[#4b1248]
+               p-5 rounded-2xl shadow-2xl 
+               hover:scale-[1.03] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)]
+               transition duration-300"
         data-nombre={String(product.nombre || "").toLowerCase().trim()}
         data-categoria={product.categoria}
       >
@@ -56,26 +63,38 @@ const categorias = ["todas", "llaveros", "imanes", "toppers"];
 
           <div class="flex flex-col md:flex-row items-center gap-6">
 
+            <!-- IMAGEN -->
             <div class="w-full md:w-60 h-52 md:h-60 overflow-hidden rounded-xl">
               <img 
                 src={product.imagenes[0] || "https://via.placeholder.com/300"} 
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover rounded-xl 
+                       group-hover:scale-110 transition duration-500"
               />
             </div>
 
+            <!-- INFO -->
             <div class="flex-1 text-center md:text-left">
 
-              <h2 class="text-xl md:text-2xl font-bold">
+              <h2 class="text-xl md:text-2xl font-bold text-white drop-shadow">
                 {product.nombre}
               </h2>
 
-              <p class="text-white/70 text-sm mt-1 mb-2">
+              <p class="text-white/60 text-sm mt-1 mb-3">
                 {product.descripcion.slice(0, 60)}...
               </p>
 
-              <p class="text-2xl md:text-3xl font-bold mt-2">
+              <p class="text-2xl md:text-3xl font-extrabold mt-2 text-green-400">
                 ${product.precio}
               </p>
+
+              <!-- BOTÓN -->
+              <button 
+                class="mt-4 px-4 py-2 rounded-lg 
+                       bg-gradient-to-r from-orange-500 to-pink-500 
+                       hover:from-orange-600 hover:to-pink-600
+                       text-white font-semibold shadow-lg transition">
+                Ver más
+              </button>
 
             </div>
           </div>
@@ -126,7 +145,6 @@ const categorias = ["todas", "llaveros", "imanes", "toppers"];
       btn.addEventListener("click", () => {
         categoriaActual = btn.dataset.categoria;
 
-        // estilo activo
         botones.forEach(b => b.classList.remove("bg-white", "text-black"));
         btn.classList.add("bg-white", "text-black");
 
