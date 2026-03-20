@@ -52,8 +52,8 @@ const categoriasDefinidas = [
         >
           <div class="relative z-10 mb-2">
             <h2 class="text-3xl font-extrabold text-white leading-tight tracking-tight">
-              {product.nombre}
-            </h2>
+  {String(product.nombre || "")}
+</h2>
             <p class="subtitulo-card text-lg">
               {product.categoria === 'toppers' ? 'Diseños a Medida' : 'Accesorios 3D de Alta Calidad'}
             </p>
