@@ -31,29 +31,29 @@ const categoriasDefinidas = [
       </nav>
     </div>
 
-  <div class="flex justify-center mb-16 px-4">
-  <div class="search-box-vibrant">
-    <span class="search-icon">🔍</span>
-    <input
-      id="searchInput"
-      type="text"
-      placeholder="¿Qué estás buscando hoy?..."
-      class="input-neon"
-    />
-  </div>
-</div>
+    <div class="flex justify-center mb-16 px-4">
+      <div class="search-box-vibrant">
+        <span class="search-icon">🔍</span>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="¿Qué estás buscando hoy?..."
+          class="input-neon"
+        />
+      </div>
+    </div>
 
     <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
       {products.map(product => (
         <div
-          class="product-item p-8"
+          class="product-item p-8 flex flex-col"
           data-nombre={String(product.nombre || "").toLowerCase()}
           data-categoria={String(product.categoria || "").toLowerCase()}
         >
           <div class="relative z-10 mb-2">
             <h2 class="text-3xl font-extrabold text-white leading-tight tracking-tight">
-  {String(product.nombre || "")}
-</h2>
+              {String(product.nombre || "")}
+            </h2>
             <p class="subtitulo-card text-lg">
               {product.categoria === 'toppers' ? 'Diseños a Medida' : 'Accesorios 3D de Alta Calidad'}
             </p>
@@ -67,22 +67,20 @@ const categoriasDefinidas = [
             />
           </div>
 
-          <div class="relative z-10 mt-6 flex flex-col gap-4">
-            <p class="precio-card">${product.precio}.00</p>
-            
-            <div class="flex">
-                <a 
-                  href={`/producto/${product.id}`} 
-                  class={`ver-detalles-btn no-underline inline-block ${
-                    product.categoria === 'llaveros' ? 'btn-morado' : 
-                    product.categoria === 'escudos' ? 'btn-rojo' : ''
-                  }`}
-                >
-                  {product.categoria === 'llaveros' ? 'Ver Más' : 
-                   product.categoria === 'toppers' ? 'Ver Detalles' : 'Comprar Ahora'}
-                </a>
-            </div>
-          </div>
+         <div class="relative z-10 mt-6 flex flex-col gap-4">
+  <p class="precio-card">${product.precio}.00</p>
+  
+  <!-- Botón ocupa el 80% del ancho y está centrado -->
+  <div class="flex justify-center">
+    <a 
+      href={`/producto/${product.id}`} 
+      class="ver-detalles-btn no-underline inline-block w-5/5 mx-auto text-center"
+    >
+      Ver Detalles
+    </a>
+  </div>
+</div>
+
         </div>
       ))}
     </div>
