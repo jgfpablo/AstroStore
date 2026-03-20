@@ -12,22 +12,29 @@ const categoriasDefinidas = [
 ];
 ---
 
-<Layout title="Catálogo Noctura">
+<Layout title="Noctura | Catálogo 3D">
   <div class="max-w-7xl mx-auto py-6 md:py-10 px-4">
     <h1 class="text-3xl md:text-6xl font-black text-center mb-8 text-white tracking-tighter uppercase leading-none">
       Catálogo Exclusivo
     </h1>
 
-    <div class="flex justify-center mb-10 px-2">
-      <nav class="categorias-unificadas-container scroll-hide">
-        {categoriasDefinidas.map((cat, index) => (
-          <button
-            class={`categoria-btn ${index === 0 ? 'active' : ''}`}
-            data-categoria={cat.id}
-          >
-            {cat.texto}
-          </button>
-        ))}
+    <div class="flex justify-center mb-10 px-4">
+      <nav class="categorias-wrapper">
+        <button id="mobileMenuBtn" class="mobile-menu-trigger">
+          <span id="activeCategoryName">Todos</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+
+        <div id="categoriesList" class="categorias-unificadas-container">
+          {categoriasDefinidas.map((cat, index) => (
+            <button
+              class={`categoria-btn ${index === 0 ? 'active' : ''}`}
+              data-categoria={cat.id}
+            >
+              {cat.texto}
+            </button>
+          ))}
+        </div>
       </nav>
     </div>
 
@@ -37,7 +44,7 @@ const categoriasDefinidas = [
         <input
           id="searchInput"
           type="text"
-          placeholder="Buscar producto..."
+          placeholder="¿Qué estás buscando hoy?..."
           class="input-neon"
         />
       </div>
@@ -54,7 +61,7 @@ const categoriasDefinidas = [
             <h2 class="text-2xl md:text-3xl font-extrabold text-white leading-tight tracking-tight">
               {String(product.nombre || "")}
             </h2>
-            <p class="subtitulo-card text-sm md:text-lg">
+            <p class="subtitulo-card text-sm md:text-lg opacity-70">
               {product.categoria === 'toppers' ? 'Diseños a Medida' : 'Accesorios 3D'}
             </p>
           </div>
@@ -68,11 +75,11 @@ const categoriasDefinidas = [
           </div>
 
           <div class="relative z-10 mt-4 flex flex-col gap-4">
-            <p class="precio-card text-2xl md:text-3xl">${product.precio}.00</p>
+            <p class="precio-card text-2xl md:text-3xl font-bold text-white">${product.precio}.00</p>
             <div class="flex justify-center">
               <a 
                 href={`/producto/${product.id}`} 
-                class="ver-detalles-btn no-underline inline-block w-full text-center py-3"
+                class="ver-detalles-btn no-underline inline-block w-full text-center py-3 bg-orange-600 rounded-xl font-bold"
               >
                 Ver Detalles
               </a>
@@ -82,18 +89,18 @@ const categoriasDefinidas = [
       ))}
     </div>
 
-    <div id="paginationControls" class="pagination-container-responsive">
-      <button id="prevPage" class="pagination-btn-vibrant-sm" title="Anterior">
+    <div id="paginationControls" class="pagination-container-responsive mt-12">
+      <button id="prevPage" class="pagination-btn-vibrant-sm">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         <span class="hidden sm:inline">Anterior</span>
       </button>
       
       <div class="page-indicator-mobile">
         <span class="current-label">PÁGINA</span>
-        <span id="pageInfo" class="page-number-sm">1 / 1</span>
+        <span id="pageInfo" class="page-number-sm text-white font-black">1 / 1</span>
       </div>
 
-      <button id="nextPage" class="pagination-btn-vibrant-sm" title="Siguiente">
+      <button id="nextPage" class="pagination-btn-vibrant-sm">
         <span class="hidden sm:inline">Siguiente</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
       </button>
@@ -101,8 +108,6 @@ const categoriasDefinidas = [
   </div>
 
   <script>
-    // Tu lógica de JS anterior se mantiene igual (setupCatalog), 
-    // solo asegúrate de que el pageInfo.textContent use "/" para ahorrar espacio
     const setupCatalog = () => {
       const input = document.getElementById("searchInput");
       const items = Array.from(document.querySelectorAll(".product-item"));
@@ -110,16 +115,23 @@ const categoriasDefinidas = [
       const prevBtn = document.getElementById("prevPage");
       const nextBtn = document.getElementById("nextPage");
       const pageInfo = document.getElementById("pageInfo");
+      
+      // Elementos del menú mobile
+      const menuBtn = document.getElementById("mobileMenuBtn");
+      const catList = document.getElementById("categoriesList");
+      const activeName = document.getElementById("activeCategoryName");
 
       const ITEMS_PER_PAGE = 6;
       let currentPage = 1;
       let filteredItems = [...items];
 
+      // Lógica Desplegable Mobile
+      menuBtn?.addEventListener("click", () => {
+        catList?.classList.toggle("show");
+      });
+
       const updatePagination = () => {
         const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 1;
-        if (currentPage > totalPages) currentPage = totalPages;
-        if (currentPage < 1) currentPage = 1;
-
         items.forEach(item => item.style.display = "none");
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
         filteredItems.slice(start, start + ITEMS_PER_PAGE).forEach(item => item.style.display = "flex");
@@ -131,26 +143,40 @@ const categoriasDefinidas = [
         nextBtn.style.opacity = nextBtn.disabled ? "0.3" : "1";
       };
 
-      const filtrar = () => {
+      const filtrar = (catId = null) => {
         const busqueda = (input?.value || "").toLowerCase().trim();
-        const catActual = document.querySelector(".categoria-btn.active")?.dataset.categoria || "todos";
+        const activeBtn = document.querySelector(".categoria-btn.active");
+        const catActual = catId || activeBtn?.dataset.categoria || "todos";
+
         filteredItems = items.filter(item => {
           const nombre = item.dataset.nombre || "";
           const categoria = item.dataset.categoria || "";
           return nombre.includes(busqueda) && (catActual === "todos" || categoria === catActual);
         });
+
         currentPage = 1;
         updatePagination();
       };
 
-      input?.addEventListener("input", filtrar);
-      botones.forEach(btn => btn.addEventListener("click", () => {
-        botones.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        filtrar();
-      }));
+      input?.addEventListener("input", () => filtrar());
+
+      botones.forEach(btn => {
+        btn.addEventListener("click", () => {
+          botones.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          
+          if (window.innerWidth <= 640) {
+            activeName.textContent = btn.textContent;
+            catList?.classList.remove("show");
+          }
+          
+          filtrar(btn.dataset.categoria);
+        });
+      });
+
       nextBtn.onclick = () => { currentPage++; updatePagination(); window.scrollTo({ top: 300, behavior: 'smooth' }); };
       prevBtn.onclick = () => { currentPage--; updatePagination(); window.scrollTo({ top: 300, behavior: 'smooth' }); };
+
       filtrar();
     };
 
@@ -159,68 +185,108 @@ const categoriasDefinidas = [
   </script>
 
   <style>
-    /* CATEGORÍAS RESPONSIVE */
+    .categorias-wrapper { position: relative; }
+
+    /* BOTONES CATEGORÍA (ESCRITORIO) */
     .categorias-unificadas-container {
       display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding: 0.5rem;
-      max-width: 100%;
-      -webkit-overflow-scrolling: touch;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .scroll-hide::-webkit-scrollbar { display: none; }
 
-    /* PAGINACIÓN RESPONSIVE */
+    .categoria-btn {
+      padding: 10px 20px;
+      border-radius: 15px;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+
+    .categoria-btn.active {
+      background: #f97316;
+      color: white;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+
+    /* ESTILO DROPDOWN MOBILE */
+    .mobile-menu-trigger { display: none; }
+
+    @media (max-width: 640px) {
+      .mobile-menu-trigger {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 220px;
+        padding: 14px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid #f97316;
+        border-radius: 16px;
+        color: white;
+        font-weight: 800;
+        text-transform: uppercase;
+        backdrop-filter: blur(10px);
+      }
+
+      .categorias-unificadas-container {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 65px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 220px;
+        background: #1a1a1a;
+        z-index: 100;
+        padding: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.8);
+      }
+
+      .categorias-unificadas-container.show {
+        display: flex;
+        animation: fadeInDown 0.2s ease-out;
+      }
+
+      .categoria-btn {
+        width: 100%;
+        text-align: left;
+        padding: 15px;
+        border-radius: 10px;
+      }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translate(-50%, -10px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* ESTILOS PAGINACIÓN */
     .pagination-container-responsive {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem;
-      margin: 3rem 0;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(0,0,0,0.3);
+      padding: 15px;
       border-radius: 20px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .pagination-btn-vibrant-sm {
-      display: flex;
-      align-items: center;
-      gap: 8px;
       background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
       color: white;
       border: none;
-      padding: 10px 16px;
+      padding: 10px 20px;
       border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .page-indicator-mobile {
+      font-weight: 800;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      min-width: 80px;
-    }
-
-    .page-number-sm {
-      font-size: 1.2rem;
-      font-weight: 900;
-      color: white;
-    }
-
-    .current-label {
-      font-size: 0.6rem;
-      color: rgba(255, 255, 255, 0.5);
-      letter-spacing: 1px;
-    }
-
-    /* Ajustes específicos para móviles muy pequeños */
-    @media (max-width: 480px) {
-      .pagination-btn-vibrant-sm { padding: 12px; }
-      .page-number-sm { font-size: 1rem; }
+      gap: 8px;
     }
   </style>
 </Layout>
