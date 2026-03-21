@@ -13,10 +13,10 @@ export function normalizarCategoria(cat) {
 }
 
 export async function getProducts() {
-  // 1. Forzamos a Google y Vercel a no usar caché con un timestamp
+  // 1. Evitamos caché con timestamp
   const urlConTimestamp = `${SHEET_URL}&t=${Date.now()}`;
 
-  // 2. Fetch con configuración para que NO guarde los datos viejos
+  // 2. Fetch forzando datos frescos
   const res = await fetch(urlConTimestamp, { 
     cache: 'no-store',
     headers: {
@@ -27,18 +27,17 @@ export async function getProducts() {
 
   const text = await res.text();
 
-  // 3. Extracción del JSON (usamos substring(47) como en tu original)
+  // 3. Extracción del JSON
   const json = JSON.parse(text.substring(47).slice(0, -2));
   const rows = json.table.rows;
 
-  return rows.map(row => {
+  const products = rows.map(row => {
     const c = row.c;
 
-    // Si la fila está totalmente vacía, la saltamos
+    // Si la fila está vacía, la saltamos
     if (!c || !c[0]) return null;
 
     return {
-      // VOLVEMOS A TUS ÍNDICES ORIGINALES (ID en la columna A)
       id: c[0]?.v,
       nombre: c[1]?.v ?? "",
       precio: Number(c[2]?.v) || 0,
@@ -49,5 +48,8 @@ export async function getProducts() {
         c[10]?.v, c[11]?.v, c[12]?.v, c[13]?.v,
       ].filter(Boolean)
     };
-  }).filter(Boolean); // Limpiamos filas vacías del array
+  }).filter(Boolean);
+
+  // 🚀 INVERTIMOS EL ARRAY: El último producto del Excel será el primero en la web
+  return products.reverse();
 }
