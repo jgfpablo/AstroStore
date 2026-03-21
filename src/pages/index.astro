@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import { getProducts } from "../lib/sheets";
 
+export const prerender = false;
+
 const products = await getProducts();
 
 // --- LÓGICA DE CATEGORÍAS DINÁMICAS ---

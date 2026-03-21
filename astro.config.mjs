@@ -4,9 +4,13 @@ import tailwindcss from "@tailwindcss/vite";
 import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
+
+  output: 'server',
   vite: {
     plugins: [tailwindcss()],
   },
 
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: { enabled: true }, // Opcional: activa analíticas de Vercel
+  }),
 });
