@@ -626,6 +626,7 @@ input {
 .thumb-card:hover {
   border-color: var(--orange);
   transform: translateY(-2px);
+  
 }
 
 .thumb-card img {
