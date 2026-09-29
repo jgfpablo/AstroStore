@@ -5,248 +5,806 @@ import { getProducts } from "../../lib/sheets";
 export const prerender = false;
 
 const id = Astro.params.id;
-const products = await getProducts();
-const product = products.find(p => String(p.id) === id);
 
-const imagenes = product?.imagenes || [];
+const products =
+  await getProducts();
+
+const product =
+  products.find(
+    p => String(p.id) === id
+  );
+
+const imagenes =
+  product?.imagenes || [];
+
+const relacionados =
+  products
+    .filter(
+      p =>
+        p.id !== product?.id &&
+        p.categoria ===
+          product?.categoria
+    )
+    .slice(0, 4);
 ---
 
-<Layout title={product?.nombre || "Producto"}>
-  <div class="max-w-6xl mx-auto px-2 sm:px-4 py-4 md:py-8">
-    <div class="mb-6 md:mb-8">
-      <a href="/" class="btn-volver-vibrant text-sm md:text-base">
-        <span class="flecha">←</span> Volver al catálogo
+<Layout
+  title={
+    product?.nombre ||
+    "Producto | Noctura"
+  }
+>
+
+  <!-- HEADER -->
+
+  <header class="noctura-header">
+
+    <div class="noctura-header-inner">
+
+      <a
+        href="/"
+        class="noctura-logo"
+      >
+        NOCTURA<span>3D</span>
       </a>
+
+      <nav class="noctura-nav">
+
+        <a href="/">
+          Catálogo
+        </a>
+
+        <a href="/#categorias">
+          Categorías
+        </a>
+
+      </nav>
+
     </div>
 
+  </header>
+
+
+  <main class="noctura-container">
+
+
+    <!-- BREADCRUMBS -->
+
+    <div class="breadcrumbs">
+
+      <a href="/">
+        Inicio
+      </a>
+
+      <span class="breadcrumb-separator">
+        ›
+      </span>
+
+      <a
+        href={`/categoria/${product?.categoria}`}
+      >
+        {product?.categoria}
+      </a>
+
+      <span class="breadcrumb-separator">
+        ›
+      </span>
+
+      <span class="current">
+        {product?.nombre}
+      </span>
+
+    </div>
+
+
     {product ? (
-      <div class="product-detail-container overflow-hidden mx-auto max-w-[400px] md:max-w-none">
-        <div class="grid grid-cols-1 md:grid-cols-2">
-          
-          <div class="p-4 md:p-8 flex flex-col items-center justify-center bg-gradient-to-br from-purple-900/10 to-transparent">
-             <div class="relative w-full aspect-square flex items-center justify-center mb-6 md:mb-8">
-                <img 
+
+      <>
+
+
+        <!-- PRODUCTO PRINCIPAL -->
+
+        <section
+          class="product-detail-container"
+        >
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2"
+          >
+
+
+            <!-- =========================
+                 GALERÍA
+                 ========================= -->
+
+            <div class="product-gallery">
+
+              <div
+                class="main-image-container"
+              >
+
+                <img
                   id="mainImage"
-                  src={imagenes[0]} 
+                  src={imagenes[0]}
                   alt={product.nombre}
-                  class="max-w-[90%] max-h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-opacity duration-300"
+                  class="main-product-image"
                 />
-             </div>
-             
-             <div class="relative w-full group">
-                <button id="prevBtn" class="nav-arrow left-0 hidden md:flex" aria-label="Anterior">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-6 h-6"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-                
-                <button id="nextBtn" class="nav-arrow right-0 hidden md:flex" aria-label="Siguiente">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-6 h-6"><path d="M9 18l6-6-6-6"/></svg>
+
+              </div>
+
+
+              <!-- THUMBNAILS -->
+
+              <div
+                class="relative mt-4"
+              >
+
+                <button
+                  id="prevBtn"
+                  class="nav-arrow left-0 hidden md:flex"
+                  aria-label="Imagen anterior"
+                >
+                  ‹
                 </button>
 
-                <div class="relative">
-                  <div id="thumbScroll" class="flex gap-3 w-full overflow-x-auto md:overflow-hidden px-2 md:px-12 py-2 scroll-smooth no-scrollbar">
-                    {imagenes.map((img) => (
-                      <div class="thumb-card flex-shrink-0 cursor-pointer w-[70px] h-[70px] md:w-[85px] md:h-[85px]">
-                        <img 
-                          src={img} 
-                          class="w-full h-full object-cover" 
-                          onclick={`document.getElementById('mainImage').src='${img}'`} 
-                        />
-                      </div>
-                    ))}
+
+                <div
+                  id="thumbScroll"
+                  class="
+                    flex
+                    gap-3
+                    overflow-x-auto
+                    no-scrollbar
+                    px-2
+                    md:px-12
+                    py-2
+                  "
+                >
+
+                  {imagenes.map(
+                    (img, index) => (
+
+                    <div
+                      class="thumb-card"
+                      data-index={index}
+                    >
+
+                      <img
+                        src={img}
+                        alt={`${product.nombre} ${index + 1}`}
+                      />
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+
+                <button
+                  id="nextBtn"
+                  class="nav-arrow right-0 hidden md:flex"
+                  aria-label="Imagen siguiente"
+                >
+                  ›
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <!-- =========================
+                 INFORMACIÓN
+                 ========================= -->
+
+            <div
+              class="details-panel"
+            >
+
+              <span
+                class="product-detail-category"
+              >
+                {product.categoria}
+              </span>
+
+
+              <h1
+                class="product-detail-title"
+              >
+                {product.nombre}
+              </h1>
+
+
+              <div
+                class="product-detail-price"
+              >
+                ${product.precio}
+              </div>
+
+
+              <div class="price-note">
+                Precio por unidad ·
+                Consultá disponibilidad
+              </div>
+
+
+              <!-- INFORMACIÓN -->
+
+              <div class="purchase-info">
+
+                <div
+                  class="purchase-info-item"
+                >
+
+                  <div
+                    class="purchase-info-icon"
+                  >
+                    ✓
                   </div>
 
-                  {imagenes.length > 3 && (
-                    <div id="scrollIndicator" class="md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex items-center bg-gradient-to-l from-black/80 to-transparent pr-2 pl-8 h-full pointer-events-none transition-opacity duration-500">
-                      <div class="animate-bounce-x bg-orange-500 rounded-full p-1 shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                      </div>
-                    </div>
-                  )}
-                </div>
-             </div>
-          </div>
+                  <span>
+                    Impresión 3D de calidad
+                  </span>
 
-          <div class="details-panel p-6 md:p-12 flex flex-col justify-between border-t md:border-t-0 md:border-l border-white/10 h-full min-h-[500px] md:min-h-[600px]">
-            <div>
-              <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-8">
-                <div>
-                  <h1 class="text-3xl md:text-5xl font-extrabold text-white leading-tight uppercase tracking-tighter">
-                    {product.nombre}
-                  </h1>
-                  <p class="text-orange-400 font-bold mt-1 md:mt-2 text-base md:text-lg">
-                    Categoría: <span class="uppercase">{product.categoria}</span>
-                  </p>
                 </div>
-                <div class="sm:text-right">
-                  <p class="text-3xl md:text-4xl font-black text-white">
-                    ${product.precio}
-                  </p>
-                  <span class="text-[10px] md:text-xs text-white/40 font-bold uppercase tracking-widest block mt-1">Efectivo / Transferencia</span>
+
+
+                <div
+                  class="purchase-info-item"
+                >
+
+                  <div
+                    class="purchase-info-icon"
+                  >
+                    ⏱
+                  </div>
+
+                  <span>
+                    Tiempo mínimo de entrega:
+                    24 horas
+                  </span>
+
                 </div>
+
+
+                <div
+                  class="purchase-info-item"
+                >
+
+                  <div
+                    class="purchase-info-icon"
+                  >
+                    🔒
+                  </div>
+
+                  <span>
+                    Atención personalizada
+                    por WhatsApp
+                  </span>
+
+                </div>
+
               </div>
 
-              <div class="prose prose-invert max-w-none mb-8">
-                <p class="text-white/80 text-base md:text-lg leading-relaxed">
-                  {product.descripcion}
-                </p>
-              </div>
 
-              <div class="pt-6 border-t border-white/10">
-                <h2 class="text-xl md:text-2xl font-bold text-white mb-3">Información de Encargos</h2>
-                <div class="space-y-3 text-white/70 text-sm md:text-base leading-snug">
-                  <p>• Se debe abonar el <strong class="text-orange-400 text-lg">50%</strong> de adelanto.</p>
-                  <p>• Tiempo mínimo de entrega: <strong class="text-white">24 horas</strong>.</p>
-                  <p>• Sujeto a complejidad del diseño.</p>
-                </div>
-              </div>
-            </div>
+              <!-- WHATSAPP -->
 
-            <div class="mt-10 md:mt-12">
-              <a 
-                href={`https://wa.me/+543764172282?text=Hola! Me interesa el producto: ${product.nombre}`}
+              <a
+                href={`https://wa.me/+543764172282?text=${encodeURIComponent(
+                  `Hola! Me interesa el producto: ${product.nombre}`
+                )}`}
                 target="_blank"
-                class="whatsapp-btn w-full no-underline flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white py-4 md:py-5 rounded-2xl font-black text-lg md:text-xl transition-all shadow-lg active:scale-95"
+                rel="noopener noreferrer"
+                class="whatsapp-btn"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.886.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.16 1.6 5.97L.06 24l6.27-1.64a11.88 11.88 0 0 0 5.72 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.44-8.44ZM12.06 21.8h-.01a9.88 9.88 0 0 1-5.04-1.38l-.36-.21-3.72.97.99-3.62-.23-.37a9.87 9.87 0 0 1-1.51-5.29C2.18 6.46 6.61 2.02 12.06 2.02c2.64 0 5.12 1.03 6.98 2.9a9.84 9.84 0 0 1 2.89 7c0 5.45-4.43 9.88-9.87 9.88Zm5.42-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.87 1.21 3.07c.15.2 2.09 3.2 5.07 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35Z"
+                  />
                 </svg>
-                WhatsApp
+
+                Consultar por WhatsApp
+
               </a>
+
+
+              <p
+                style="
+                  margin-top:12px;
+                  text-align:center;
+                  color:#8a8f98;
+                  font-size:.72rem;
+                "
+              >
+                Te responderemos directamente
+                para confirmar disponibilidad,
+                colores y detalles.
+              </p>
+
             </div>
+
           </div>
-        </div>
-      </div>
+
+        </section>
+
+
+        <!-- =========================
+             DESCRIPCIÓN
+             ========================= -->
+
+        <section
+          class="product-section"
+        >
+
+          <h2>
+            Descripción del producto
+          </h2>
+
+          <p
+            class="product-description"
+          >
+            {product.descripcion}
+          </p>
+
+        </section>
+
+
+        <!-- =========================
+             CONDICIONES
+             ========================= -->
+
+        <section
+          class="product-section"
+        >
+
+          <h2>
+            Información de encargos
+          </h2>
+
+          <div
+            class="product-description"
+          >
+
+            <p>
+              • Se debe abonar el
+              <strong>
+                50%
+              </strong>
+              de adelanto.
+            </p>
+
+            <p>
+              • Tiempo mínimo de entrega:
+              <strong>
+                24 horas
+              </strong>.
+            </p>
+
+            <p>
+              • El tiempo puede variar
+              según la complejidad
+              del diseño.
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             BENEFICIOS
+             ========================= -->
+
+        <section
+          class="product-section"
+        >
+
+          <h2>
+            ¿Por qué comprar en Noctura?
+          </h2>
+
+
+          <div
+            class="benefits-grid"
+          >
+
+            <div class="benefit">
+
+              <div
+                class="benefit-icon"
+              >
+                ✓
+              </div>
+
+              <div>
+
+                <strong>
+                  Impresión 3D
+                </strong>
+
+                <span>
+                  Productos fabricados
+                  mediante impresión 3D.
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="benefit">
+
+              <div
+                class="benefit-icon"
+              >
+                ⚙
+              </div>
+
+              <div>
+
+                <strong>
+                  Atención directa
+                </strong>
+
+                <span>
+                  Consultá colores,
+                  cantidades y disponibilidad.
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="benefit">
+
+              <div
+                class="benefit-icon"
+              >
+                ♡
+              </div>
+
+              <div>
+
+                <strong>
+                  Hecho para vos
+                </strong>
+
+                <span>
+                  También podemos consultar
+                  opciones personalizadas.
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             PRODUCTOS RELACIONADOS
+             ========================= -->
+
+        {relacionados.length > 0 && (
+
+          <section
+            class="product-section"
+          >
+
+            <h2>
+              También te puede interesar
+            </h2>
+
+
+            <div
+              class="
+                grid
+                grid-cols-2
+                md:grid-cols-4
+                gap-4
+              "
+            >
+
+              {relacionados.map(
+                related => (
+
+                <a
+                  href={`/producto/${related.id}`}
+                  style="
+                    text-decoration:none;
+                    color:inherit;
+                  "
+                >
+
+                  <div
+                    class="product-item"
+                    style="
+                      min-height:300px;
+                    "
+                  >
+
+                    <div
+                      class="product-image-area"
+                      style="
+                        height:190px;
+                        margin:8px;
+                      "
+                    >
+
+                      <img
+                        src={
+                          related.imagenes?.[0]
+                        }
+                        alt={related.nombre}
+                      />
+
+                    </div>
+
+
+                    <div
+                      class="product-info"
+                    >
+
+                      <span
+                        class="product-category"
+                      >
+                        {related.categoria}
+                      </span>
+
+                      <h3
+                        class="product-title"
+                      >
+                        {related.nombre}
+                      </h3>
+
+                      <div
+                        class="product-price"
+                        style="
+                          font-size:1.15rem;
+                        "
+                      >
+                        ${related.precio}
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </a>
+
+              ))}
+
+            </div>
+
+          </section>
+
+        )}
+
+      </>
+
     ) : (
-      <div class="text-center py-20">
-        <p class="text-2xl text-white/20">Producto no encontrado</p>
-      </div>
+
+      <section
+        class="product-section"
+        style="
+          text-align:center;
+          margin-top:30px;
+          padding:80px 20px;
+        "
+      >
+
+        <h1>
+          Producto no encontrado
+        </h1>
+
+        <p
+          class="product-description"
+        >
+          El producto que buscás
+          no existe o ya no está disponible.
+        </p>
+
+        <a
+          href="/"
+          class="ver-detalles-btn"
+          style="
+            max-width:220px;
+            margin:25px auto 0;
+          "
+        >
+          Volver al catálogo
+        </a>
+
+      </section>
+
     )}
-  </div>
-</Layout>
 
-<script>
-  const setupGallery = () => {
-    const scrollContainer = document.getElementById('thumbScroll');
-    const scrollIndicator = document.getElementById('scrollIndicator');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const mainImage = document.getElementById('mainImage') as HTMLImageElement;
-    
-    const thumbs = Array.from(document.querySelectorAll('.thumb-card img')) as HTMLImageElement[];
-    let currentIndex = 0;
+  </main>
 
-    // Función para ocultar el indicador de scroll
-    const hideIndicator = () => {
-      if (scrollIndicator) {
-        scrollIndicator.style.opacity = '0';
-        setTimeout(() => scrollIndicator.remove(), 500);
-      }
-    };
 
-    const updateMainImage = (index: number) => {
-      if (thumbs[index] && mainImage) {
-        mainImage.style.opacity = '0';
+  <script>
+
+    const setupGallery = () => {
+
+      const mainImage =
+        document.getElementById(
+          "mainImage"
+        ) as HTMLImageElement;
+
+
+      const thumbs =
+        Array.from(
+          document.querySelectorAll(
+            ".thumb-card"
+          )
+        ) as HTMLElement[];
+
+
+      const scrollContainer =
+        document.getElementById(
+          "thumbScroll"
+        );
+
+
+      const prevBtn =
+        document.getElementById(
+          "prevBtn"
+        );
+
+
+      const nextBtn =
+        document.getElementById(
+          "nextBtn"
+        );
+
+
+      let currentIndex = 0;
+
+
+      const updateImage = (
+        index: number
+      ) => {
+
+        if (
+          !thumbs[index] ||
+          !mainImage
+        ) {
+          return;
+        }
+
+
+        const image =
+          thumbs[index].querySelector(
+            "img"
+          ) as HTMLImageElement;
+
+
+        if (!image) {
+          return;
+        }
+
+
+        mainImage.style.opacity = "0";
+
+
         setTimeout(() => {
-          mainImage.src = thumbs[index].src;
-          mainImage.style.opacity = '1';
-        }, 200);
+
+          mainImage.src =
+            image.src;
+
+          mainImage.style.opacity =
+            "1";
+
+        }, 120);
+
+
         currentIndex = index;
-        hideIndicator(); // Ocultar si cambian de imagen
+
+
+        thumbs.forEach(
+          thumb =>
+            thumb.style.borderColor =
+              "transparent"
+        );
+
+
+        thumbs[index].style.borderColor =
+          "#f97316";
+
+      };
+
+
+      thumbs.forEach(
+        (thumb, index) => {
+
+          thumb.addEventListener(
+            "click",
+            () => {
+
+              updateImage(index);
+
+            }
+          );
+
+        }
+      );
+
+
+      nextBtn?.addEventListener(
+        "click",
+        () => {
+
+          if (
+            currentIndex <
+            thumbs.length - 1
+          ) {
+
+            updateImage(
+              currentIndex + 1
+            );
+
+            scrollContainer?.scrollBy({
+              left: 90,
+              behavior: "smooth"
+            });
+
+          }
+
+        }
+      );
+
+
+      prevBtn?.addEventListener(
+        "click",
+        () => {
+
+          if (
+            currentIndex > 0
+          ) {
+
+            updateImage(
+              currentIndex - 1
+            );
+
+            scrollContainer?.scrollBy({
+              left: -90,
+              behavior: "smooth"
+            });
+
+          }
+
+        }
+      );
+
+
+      if (thumbs.length > 0) {
+
+        updateImage(0);
+
       }
+
     };
 
-    if (scrollContainer) {
-      // Ocultar indicador si el usuario hace scroll manual
-      scrollContainer.onscroll = hideIndicator;
 
-      if (prevBtn && nextBtn) {
-        nextBtn.onclick = () => {
-          if (currentIndex < thumbs.length - 1) updateMainImage(currentIndex + 1);
-          scrollContainer.scrollBy({ left: 100, behavior: 'smooth' });
-        };
-        prevBtn.onclick = () => {
-          if (currentIndex > 0) updateMainImage(currentIndex - 1);
-          scrollContainer.scrollBy({ left: -100, behavior: 'smooth' });
-        };
-      }
-    }
-    
-    thumbs.forEach((thumb, index) => {
-      thumb.parentElement?.addEventListener('click', () => updateMainImage(index));
-    });
-  };
+    setupGallery();
 
-  setupGallery();
-  document.addEventListener('astro:after-swap', setupGallery);
-</script>
 
-<style>
-  /* Animación personalizada para la flecha de mobile */
-  @keyframes bounce-x {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
-  }
-  .animate-bounce-x {
-    animation: bounce-x 1s infinite;
-  }
+    document.addEventListener(
+      "astro:after-swap",
+      setupGallery
+    );
 
-  .product-detail-container {
-    background: linear-gradient(145deg, #2d162a 0%, #121225 50%, #6e2114 100%);
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
-  }
+  </script>
 
-  @media (min-width: 768px) {
-    .product-detail-container { border-radius: 32px; }
-  }
-
-  .details-panel {
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(20px);
-  }
-
-  .no-scrollbar::-webkit-scrollbar { display: none; }
-  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-  .nav-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .thumb-card {
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.3);
-    transition: all 0.2s ease;
-  }
-
-  .thumb-card:hover, .thumb-card:active {
-    border-color: #f97316;
-    transform: scale(1.05);
-  }
-
-  .btn-volver-vibrant {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: white;
-    font-weight: 700;
-    text-decoration: none;
-    opacity: 0.7;
-  }
-</style>
+</Layout>

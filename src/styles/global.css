@@ -1,310 +1,1269 @@
 @import "tailwindcss";
 
+/* =========================================================
+   NOCTURA — ECOMMERCE DESIGN
+   ========================================================= */
+
+:root {
+  --orange: #f97316;
+  --orange-dark: #ea580c;
+  --orange-light: #fb923c;
+
+  --black: #111111;
+  --text: #202124;
+  --text-soft: #5f6368;
+  --text-muted: #8a8f98;
+
+  --background: #f7f7f8;
+  --surface: #ffffff;
+  --surface-soft: #fafafa;
+
+  --border: #e7e7e9;
+  --border-dark: #d8d8dc;
+
+  --green: #16a34a;
+
+  --radius: 12px;
+  --radius-lg: 18px;
+
+  --shadow:
+    0 4px 20px rgba(0, 0, 0, 0.06);
+
+  --shadow-hover:
+    0 12px 35px rgba(0, 0, 0, 0.10);
+
+  --transition:
+    0.22s ease;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
 * {
-  scroll-behavior: smooth;
   box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
-  background: #0f0f1a url("/src/assets/fondo.png") no-repeat center center fixed;
-  background-size: cover;
+  margin: 0;
+
   min-height: 100vh;
-  font-family: 'Inter', system-ui, sans-serif;
-  color: #fff;
+
+  background: var(--background);
+
+  color: var(--text);
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
 }
 
-/* --- NUEVA BARRA DE CATEGORÍAS UNIFICADA (Estilo Segmentado) --- */
+img {
+  max-width: 100%;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--orange);
+  color: white;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--orange);
+}
+
+/* =========================================================
+   HEADER / MARCA
+   ========================================================= */
+
+.noctura-header {
+  width: 100%;
+
+  background: white;
+
+  border-bottom:
+    1px solid var(--border);
+
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.noctura-header-inner {
+  max-width: 1280px;
+
+  min-height: 68px;
+
+  margin: auto;
+
+  padding: 0 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.noctura-logo {
+  color: var(--black);
+
+  font-size: 1.35rem;
+  font-weight: 900;
+
+  letter-spacing: -0.05em;
+
+  text-decoration: none;
+}
+
+.noctura-logo span {
+  color: var(--orange);
+}
+
+.noctura-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.noctura-nav a {
+  color: var(--text-soft);
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: color var(--transition);
+}
+
+.noctura-nav a:hover {
+  color: var(--orange);
+}
+
+/* =========================================================
+   CONTENEDOR
+   ========================================================= */
+
+.noctura-container {
+  width: min(1200px, calc(100% - 32px));
+
+  margin: 0 auto;
+}
+
+/* =========================================================
+   BREADCRUMBS
+   ========================================================= */
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+
+  padding: 20px 0;
+
+  color: var(--text-muted);
+
+  font-size: 0.78rem;
+}
+
+.breadcrumbs a {
+  color: var(--text-soft);
+
+  text-decoration: none;
+
+  transition: color var(--transition);
+}
+
+.breadcrumbs a:hover {
+  color: var(--orange);
+}
+
+.breadcrumbs .current {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.breadcrumb-separator {
+  color: #b7b7bb;
+}
+
+/* =========================================================
+   CATÁLOGO — HERO
+   ========================================================= */
+
+.catalog-header {
+  text-align: center;
+
+  padding:
+    38px 0 30px;
+}
+
+.catalog-eyebrow {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--orange);
+
+  font-size: 0.72rem;
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+}
+
+.catalog-header h1 {
+  margin: 0;
+
+  color: var(--black);
+
+  font-size: clamp(2rem, 5vw, 3.4rem);
+
+  font-weight: 900;
+
+  line-height: 1;
+
+  letter-spacing: -0.055em;
+}
+
+.catalog-header p {
+  max-width: 600px;
+
+  margin: 15px auto 0;
+
+  color: var(--text-soft);
+
+  font-size: 1rem;
+
+  line-height: 1.6;
+}
+
+/* =========================================================
+   CATEGORÍAS
+   ========================================================= */
+
+.categorias-wrapper {
+  display: flex;
+  justify-content: center;
+
+  margin-bottom: 25px;
+}
 
 .categorias-unificadas-container {
-  display: flex; /* Pegamos los botones */
-  background: rgba(255, 255, 255, 0.04); /* Fondo traslúcido global */
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08); /* Borde global suave */
-  border-radius: 999px; /* Bordes totalmente redondeados */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  overflow: hidden; /* Cortamos los bordes internos */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 5px;
+
+  background: white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 999px;
+
+  box-shadow: var(--shadow);
 }
 
 .categoria-btn {
-  background: transparent; /* Fondo transparente por defecto */
-  color: rgba(255, 255, 255, 0.7); /* Texto blanco suave */
-  padding: 12px 28px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  padding: 9px 19px;
+
   border: none;
+  border-radius: 999px;
+
+  background: transparent;
+
+  color: var(--text-soft);
+
+  font-size: 0.88rem;
+  font-weight: 700;
+
   cursor: pointer;
-  border-right: 1px solid rgba(255, 255, 255, 0.08); /* División interna */
+
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 
-/* Eliminamos la división para el último botón */
-.categoria-btn:last-child {
-  border-right: none;
+.categoria-btn:hover {
+  background: #f3f3f4;
+
+  color: var(--text);
 }
 
-.categoria-btn:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.03);
-  color: #fff;
-}
-
-/* --- ESTILO ACTIVO (Gradiente Naranja con Relieve) --- */
 .categoria-btn.active {
-  background: linear-gradient(180deg, #ff9800 0%, #f44336 100%); /* Gradiente naranja sólido */
-  color: #fff !important;
-  border-color: #e65100; /* Borde interno naranja */
-  box-shadow: 
-    0 4px 0px #bf360c,  /* Relieve 3D inferior */
-    inset 0 1px 1px rgba(255,255,255,0.2); /* Brillo interno superior */
-  border-radius: 999px; /* Forzamos el redondeado del elemento activo */
-  transform: translateY(-1px); /* Elevación suave */
-  z-index: 5; /* Aseguramos que el relieve no se corte */
-}
+  background: var(--orange);
 
-/* --- BUSCADOR ESTILO NEON --- */
-.buscador-neon {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
-  transition: all 0.3s ease;
+
+  box-shadow:
+    0 4px 12px rgba(249, 115, 22, 0.22);
 }
 
-.buscador-neon:focus {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: #f44336; /* Color Neon */
-  box-shadow: 
-    0 0 10px rgba(244, 67, 54, 0.2),
-    0 0 25px rgba(244, 67, 54, 0.1); /* Efecto Brillo */
+.mobile-menu-trigger {
+  display: none;
 }
 
-
-/* --- PRODUCT CARD (Más ancha) --- */
-.product-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 24px;
-  min-height: 32rem;
-  background: linear-gradient(145deg, #1a1a2e 0%, #25162a 40%, #6e2114 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
-  display: flex;
-  flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.product-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.subtitulo-card {
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 400;
-  margin-top: 4px;
-}
-
-.precio-card {
-  color: #ffffff;
-  font-size: 2.2rem;
-  font-weight: 900;
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-  margin: 0;
-}
-
-/* --- BOTONES CON ESTILO 3D --- */
-.ver-detalles-btn {
-  text-decoration: none;
-  background: linear-gradient(to bottom, #ff9800, #f44336);
-  color: white !important;
-  font-weight: 800;
-  padding: 14px 32px;
-  border-radius: 12px;
-  border: 1px solid #e65100;
-  box-shadow: 0 5px 0px #bf360c, 0 8px 20px rgba(0,0,0,0.4);
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-  font-size: 1.1rem;
-  transition: all 0.2s ease;
-  text-align: center;
-}
-
-.ver-detalles-btn:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-.ver-detalles-btn:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0px #bf360c;
-}
-
-.btn-morado { background: linear-gradient(to bottom, #9c27b0, #6a1b9a); border-color: #4a148c; box-shadow: 0 5px 0px #310d5e, 0 8px 20px rgba(0,0,0,0.4); }
-.btn-rojo { background: linear-gradient(to bottom, #f44336, #b71c1c); border-color: #7f0000; box-shadow: 0 5px 0px #5a0000, 0 8px 20px rgba(0,0,0,0.4); }
-
-
-
-
-
-/* --- BOTÓN VOLVER AL CATÁLOGO VIBRANTE --- */
-/* --- CONTENEDOR PARA DAR ESPACIO --- */
-.container-volver {
-  padding: 20px 0;
-  margin-bottom: 20px;
-}
-
-/* --- BOTÓN VOLVER CON MÁXIMO CONTRASTE --- */
-.btn-volver-vibrant {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  
-  /* Fondo de cristal más opaco para que no se trasluzca tanto el fondo naranja */
-  background: rgba(15, 15, 26, 0.6); 
-  backdrop-filter: blur(15px);
-  
-  /* Borde grueso y brillante */
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-radius: 14px;
-  
-  color: #ffffff;
-  font-weight: 800; /* Texto más grueso */
-  font-size: 1.1rem;
-  text-decoration: none;
-  text-transform: uppercase; /* Más autoridad visual */
-  letter-spacing: 0.5px;
-  
-  /* Sombra externa para separar del fondo */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-volver-vibrant .flecha {
-  font-size: 1.4rem;
-  transition: transform 0.3s ease;
-}
-
-/* --- ESTADO HOVER (LLAMATIVO) --- */
-.btn-volver-vibrant:hover {
-  background: #ffffff; /* Cambio radical a blanco */
-  color: #f44336; /* Texto en rojo/naranja */
-  border-color: #ffffff;
-  transform: translateX(-8px); /* Movimiento más marcado */
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
-}
-
-.btn-volver-vibrant:hover .flecha {
-  transform: translateX(-5px);
-}
-
-/* Efecto de pulsación al hacer clic */
-.btn-volver-vibrant:active {
-  transform: scale(0.9);
-}
-
-
-
-
-/*Buscador*/
-
-/* --- BUSCADOR VIBRANTE --- */
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
 
 .search-box-vibrant {
-  position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 650px;
-  background: rgba(20, 20, 35, 0.7); /* Fondo oscuro para contraste */
-  backdrop-filter: blur(20px);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 5px 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-  transition: all 0.4s ease;
+
+  width: min(620px, 100%);
+
+  margin: 0 auto 35px;
+
+  padding: 0 17px;
+
+  background: white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.03);
+
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.search-box-vibrant:focus-within {
+  border-color: var(--orange);
+
+  box-shadow:
+    0 0 0 3px rgba(249, 115, 22, 0.10);
 }
 
 .search-icon {
-  font-size: 1.2rem;
-  margin-right: 15px;
-  opacity: 0.6;
+  margin-right: 10px;
+
+  color: #8c8c8c;
+
+  font-size: 1rem;
 }
 
 .input-neon {
   width: 100%;
-  background: transparent;
+
+  padding: 13px 0;
+
   border: none;
   outline: none;
-  padding: 15px 0;
-  font-size: 1.2rem;
-  color: #ffffff;
-  font-weight: 500;
+
+  background: transparent;
+
+  color: var(--text);
+
+  font-size: 0.95rem;
 }
 
 .input-neon::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: #a0a0a4;
 }
 
-/* --- EFECTO AL HACER CLICK (FOCUS) --- */
+/* =========================================================
+   PRODUCT GRID
+   ========================================================= */
 
-.search-box-vibrant:focus-within {
-  border-color: #ff9800; /* Naranja vibrante */
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 
-    0 0 25px rgba(255, 152, 0, 0.2),
-    0 20px 40px rgba(0, 0, 0, 0.6);
+.product-item {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 450px;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  background: white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
-.search-box-vibrant:focus-within .search-icon {
-  opacity: 1;
-  filter: drop-shadow(0 0 5px #ff9800);
+.product-item:hover {
+  transform: translateY(-4px);
+
+  box-shadow: var(--shadow-hover);
+
+  border-color: #dedee1;
 }
 
-/* Animación sutil para que aparezca suavemente */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+/* =========================================================
+   PRODUCT IMAGE
+   ========================================================= */
+
+.product-image-area {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 290px;
+
+  margin: 10px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fafafa,
+      #f2f2f3
+    );
+
+  border-radius: 14px;
 }
 
-.search-box-vibrant {
-  animation: slideUp 0.6s ease-out forwards;
+.product-image-area img {
+  width: 100%;
+  height: 100%;
+
+  padding: 20px;
+
+  object-fit: contain;
+
+  transition:
+    transform 0.35s ease;
 }
 
+.product-item:hover .product-image-area img {
+  transform: scale(1.045);
+}
 
+/* =========================================================
+   PRODUCT INFO
+   ========================================================= */
 
+.product-info {
+  display: flex;
+  flex-direction: column;
 
-/* WARAP */
+  flex: 1;
 
-/* --- BOTÓN ESTILO WHATSAPP VIBRANTE --- */
-.whatsapp-btn {
-  background: linear-gradient(90deg, #128c7e 0%, #25d366 100%);
-  color: white;
+  padding: 16px 18px 18px;
+}
+
+.product-category {
+  margin-bottom: 5px;
+
+  color: var(--orange);
+
+  font-size: 0.7rem;
   font-weight: 800;
-  font-size: 1.4rem;
-  padding: 16px;
-  border-radius: 16px;
-  cursor: pointer;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.product-title {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 1.05rem;
+
+  font-weight: 750;
+
+  line-height: 1.3;
+}
+
+.product-price {
+  margin-top: 10px;
+
+  color: var(--black);
+
+  font-size: 1.55rem;
+
+  font-weight: 900;
+
+  letter-spacing: -0.03em;
+}
+
+.product-action {
+  display: flex;
+
+  margin-top: auto;
+  padding-top: 15px;
+}
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+.ver-detalles-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  min-height: 44px;
+
+  padding: 11px 18px;
+
+  background: var(--black);
+
+  color: white !important;
+
+  border-radius: 9px;
+
+  font-size: 0.88rem;
+  font-weight: 800;
+
   text-decoration: none;
-  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.2);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  transition:
+    background var(--transition),
+    transform var(--transition);
+}
+
+.ver-detalles-btn:hover {
+  background: var(--orange);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   VOLVER
+   ========================================================= */
+
+.container-volver {
+  padding: 20px 0;
+}
+
+.btn-volver-vibrant {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  color: var(--text-soft);
+
+  font-size: 0.88rem;
+  font-weight: 650;
+
+  text-decoration: none;
+
+  transition: color var(--transition);
+}
+
+.btn-volver-vibrant:hover {
+  color: var(--orange);
+}
+
+.btn-volver-vibrant .flecha {
+  font-size: 1.1rem;
+}
+
+/* =========================================================
+   PRODUCT DETAIL
+   ========================================================= */
+
+.product-detail-container {
+  overflow: hidden;
+
+  background: white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 8px 35px rgba(0, 0, 0, 0.06);
+}
+
+.product-gallery {
+  padding: 20px;
+}
+
+.main-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  min-height: 520px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fafafa,
+      #f1f1f2
+    );
+
+  border-radius: 14px;
+
+  overflow: hidden;
+}
+
+.main-product-image {
+  width: 100%;
+  height: 500px;
+
+  padding: 35px;
+
+  object-fit: contain;
+
+  transition: opacity 0.2s ease;
+}
+
+/* =========================================================
+   THUMBNAILS
+   ========================================================= */
+
+.thumb-card {
+  flex-shrink: 0;
+
+  width: 76px;
+  height: 76px;
+
+  overflow: hidden;
+
+  background: #f5f5f5;
+
+  border:
+    2px solid transparent;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.thumb-card:hover {
+  border-color: var(--orange);
+
+  transform: translateY(-2px);
+}
+
+.thumb-card img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+/* =========================================================
+   FLECHAS GALERÍA
+   ========================================================= */
+
+.nav-arrow {
+  position: absolute;
+
+  top: 50%;
+
+  width: 38px;
+  height: 38px;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 50%;
+
+  color: var(--text);
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.08);
+
+  transition:
+    color var(--transition),
+    transform var(--transition);
+}
+
+.nav-arrow:hover {
+  color: var(--orange);
+
+  transform:
+    translateY(-50%)
+    scale(1.05);
+}
+
+/* =========================================================
+   DETALLES DEL PRODUCTO
+   ========================================================= */
+
+.details-panel {
+  padding: 35px;
+
+  border-left:
+    1px solid var(--border);
+}
+
+.product-detail-title {
+  margin: 0;
+
+  color: var(--black);
+
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+
+  font-weight: 900;
+
+  line-height: 1.05;
+
+  letter-spacing: -0.04em;
+}
+
+.product-detail-category {
+  margin-top: 8px;
+
+  color: var(--orange);
+
+  font-size: 0.75rem;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.product-detail-price {
+  margin-top: 20px;
+
+  color: var(--black);
+
+  font-size: 2.45rem;
+
+  font-weight: 900;
+
+  letter-spacing: -0.05em;
+}
+
+.price-note {
+  margin-top: 3px;
+
+  color: var(--text-muted);
+
+  font-size: 0.72rem;
+}
+
+/* =========================================================
+   INFORMACIÓN DE COMPRA
+   ========================================================= */
+
+.purchase-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 13px;
+
+  margin-top: 25px;
+
+  padding:
+    18px 0;
+
+  border-top:
+    1px solid var(--border);
+
+  border-bottom:
+    1px solid var(--border);
+}
+
+.purchase-info-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  color: var(--text-soft);
+
+  font-size: 0.86rem;
+}
+
+.purchase-info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  background: #fff7ed;
+
+  border-radius: 8px;
+
+  color: var(--orange);
+
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   WHATSAPP
+   ========================================================= */
+
+.whatsapp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  width: 100%;
+
+  margin-top: 25px;
+
+  padding: 15px 20px;
+
+  background: #25d366;
+
+  color: white !important;
+
+  border-radius: 10px;
+
+  font-size: 1rem;
+  font-weight: 850;
+
+  text-decoration: none;
+
+  box-shadow:
+    0 7px 20px rgba(37, 211, 102, 0.18);
+
+  transition:
+    background var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .whatsapp-btn:hover {
-  transform: translateY(-5px) scale(1.02);
-  filter: brightness(1.1);
-  box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4), 
-              0 0 15px rgba(37, 211, 102, 0.2);
+  background: #1fba59;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 25px rgba(37, 211, 102, 0.25);
 }
 
-.whatsapp-btn:active {
-  transform: scale(0.95);
+/* =========================================================
+   SECCIONES DEL PRODUCTO
+   ========================================================= */
+
+.product-section {
+  margin-top: 22px;
+
+  padding: 30px;
+
+  background: white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 16px;
 }
 
-/* Ajuste del icono para que brille un poco */
-.whatsapp-btn svg {
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+.product-section h2 {
+  margin: 0 0 12px;
+
+  color: var(--black);
+
+  font-size: 1.15rem;
+
+  font-weight: 850;
 }
 
-/* -------------*/
+.product-description {
+  color: var(--text-soft);
 
+  font-size: 0.95rem;
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   BENEFICIOS
+   ========================================================= */
+
+.benefits-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 25px;
+}
+
+.benefit {
+  display: flex;
+  gap: 12px;
+}
+
+.benefit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  background: #fff7ed;
+
+  border-radius: 10px;
+
+  color: var(--orange);
+}
+
+.benefit strong {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: var(--text);
+
+  font-size: 0.86rem;
+}
+
+.benefit span {
+  color: var(--text-muted);
+
+  font-size: 0.76rem;
+
+  line-height: 1.4;
+}
+
+/* =========================================================
+   PAGINACIÓN
+   ========================================================= */
+
+.pagination-container-vibrant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 15px;
+
+  width: fit-content;
+
+  margin: 45px auto;
+
+  padding: 6px;
+
+  background: white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 12px;
+
+  box-shadow: var(--shadow);
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 8px;
+
+  color: var(--text-soft);
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+.pagination-btn:not(:disabled):hover,
+.pagination-btn.active {
+  background: var(--orange);
+
+  color: white;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.3;
+
+  cursor: not-allowed;
+}
+
+.page-info-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.page-label {
+  color: var(--text-muted);
+
+  font-size: 0.55rem;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+}
+
+.page-counter {
+  color: var(--black);
+
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .noctura-header-inner {
+    min-height: 60px;
+
+    padding:
+      0 16px;
+  }
+
+  .noctura-nav {
+    gap: 12px;
+  }
+
+  .noctura-nav a {
+    font-size: 0.78rem;
+  }
+
+  .noctura-container {
+    width: min(
+      100% - 24px,
+      1200px
+    );
+  }
+
+  .catalog-header {
+    padding-top: 28px;
+  }
+
+  .catalog-header h1 {
+    font-size: 2.15rem;
+  }
+
+  .catalog-header p {
+    font-size: 0.9rem;
+  }
+
+  /* categorías */
+
+  .mobile-menu-trigger {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    width: min(300px, 100%);
+
+    padding: 12px 15px;
+
+    background: white;
+
+    border:
+      1px solid var(--border);
+
+    border-radius: 10px;
+
+    color: var(--text);
+
+    font-weight: 750;
+
+    box-shadow: var(--shadow);
+
+    cursor: pointer;
+  }
+
+  .categorias-unificadas-container {
+    display: none;
+
+    position: absolute;
+
+    top: calc(100% + 8px);
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 100;
+
+    flex-direction: column;
+
+    width: min(
+      300px,
+      calc(100vw - 30px)
+    );
+
+    padding: 5px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow:
+      0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .categorias-unificadas-container.show {
+    display: flex;
+  }
+
+  .categoria-btn {
+    width: 100%;
+
+    border-radius: 8px;
+
+    text-align: left;
+  }
+
+  /* cards */
+
+  .product-item {
+    min-height: 420px;
+  }
+
+  .product-image-area {
+    height: 250px;
+  }
+
+  .product-image-area img {
+    padding: 15px;
+  }
+
+  /* producto */
+
+  .product-gallery {
+    padding: 12px;
+  }
+
+  .main-image-container {
+    min-height: 340px;
+  }
+
+  .main-product-image {
+    height: 330px;
+
+    padding: 20px;
+  }
+
+  .details-panel {
+    padding: 24px 20px;
+
+    border-left: none;
+
+    border-top:
+      1px solid var(--border);
+  }
+
+  .product-detail-price {
+    font-size: 2.1rem;
+  }
+
+  .product-section {
+    padding: 22px 18px;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+}
+
+/* =========================================================
+   MOBILE PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .noctura-nav a {
+    display: none;
+  }
+
+  .product-image-area {
+    height: 230px;
+  }
+
+  .main-image-container {
+    min-height: 300px;
+  }
+
+  .main-product-image {
+    height: 290px;
+  }
+
+  .thumb-card {
+    width: 64px;
+    height: 64px;
+  }
+}
